@@ -1,6 +1,5 @@
-const products = [
+const products = () => [
     {
-        _id: '1',
         name: 'Airpods Wireless Bluetooth Headphones',
         image: '/images/airpods.jpg',
         description: 'Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working',
@@ -12,7 +11,6 @@ const products = [
         numReviews: 12,
     },
     {
-        _id: '2',
         name: 'Alexa Smart Speaker',
         image: '/images/alexa.jpg',
         description: 'Voice-controlled smart speaker with Alexa, perfect for any room. Stream music, ask questions, control smart home devices, and more.',
@@ -24,7 +22,6 @@ const products = [
         numReviews: 25,
     },
     {
-        _id: '3',
         name: 'Canon DSLR Camera',
         image: '/images/camera.jpg',
         description: 'Capture stunning photos and videos with this DSLR camera. Features high-resolution sensor, multiple shooting modes, and built-in WiFi.',
@@ -36,7 +33,6 @@ const products = [
         numReviews: 15,
     },
     {
-        _id: '4',
         name: 'Wireless Gaming Mouse',
         image: '/images/mouse.jpg',
         description: 'Ergonomic design and high-precision sensor for gaming. Wireless connectivity and customizable buttons for enhanced performance.',
@@ -48,7 +44,6 @@ const products = [
         numReviews: 30,
     },
     {
-        _id: '5',
         name: 'Smartphone with 5G Connectivity',
         image: '/images/phone.jpg',
         description: 'Latest smartphone with 5G connectivity, high-resolution display, and advanced camera system. Fast performance and long battery life.',
@@ -60,7 +55,6 @@ const products = [
         numReviews: 22,
     },
     {
-        _id: '6',
         name: 'PlayStation 5 Console',
         image: '/images/playstation.jpg',
         description: 'Next-gen gaming console with ultra-high-speed SSD, stunning graphics, and immersive gameplay. Includes DualSense wireless controller.',
@@ -73,4 +67,4 @@ const products = [
     }
 ]
 
-export default products;
+export default products();

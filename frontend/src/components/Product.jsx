@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import Rating from './Rating'
 
 const Product = ({ product }) => {
     return (
@@ -9,11 +10,16 @@ const Product = ({ product }) => {
             </Link>
 
             <div className="p-4">
-                <Link to={`/product/${product._id}`}>
+                <div className="product-title">
+                <Link to={`/product/${product._id}`} >
                     <h2 className="text-xl font-bold mb-2">{product.name}</h2>
-                </Link>
+                </Link> 4
+                </div>
 
-                <p className="text-2xl font-semibold text-gray-800">${product.price}</p>
+                <Rating  value={ product.rating } text={ `${product.numReviews} reviews` }/>
+
+
+                <p className="text-2xl font-semibold text-gray-800">{ product.price }</p>
             </div>
         </div>
     );

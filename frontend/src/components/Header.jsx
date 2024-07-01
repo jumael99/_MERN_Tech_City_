@@ -14,7 +14,7 @@ const Header = () => {
         <header className="bg-gray-900">
             <nav className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-16">
-                    <div className="flex items-center">
+                    <div>
                         <Link to="/" className="flex items-center">
                             <img src={logo} alt="TechCity logo" className="h-8 w-8 mr-2" />
                             <span className="text-white text-lg font-bold">TechCity</span>

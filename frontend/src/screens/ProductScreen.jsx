@@ -19,7 +19,11 @@ const ProductScreen = () => {
     const {data: product, isLoading, error} = useGetProductDetailsQuery(productId);
 
     const addToCartHandler = () => {
+<<<<<<< Updated upstream
         dispatch(addToCart({...product, qty}));
+=======
+        dispatch(addToCart({...product}));
+>>>>>>> Stashed changes
         navigate('/cart');
     }
 

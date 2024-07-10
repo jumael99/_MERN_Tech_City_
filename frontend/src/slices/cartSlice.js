@@ -1,10 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+<<<<<<< Updated upstream
 import {updateCart} from "../utils/cartUtils";
 
 const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))
   : { cartItems: [] };
 
+=======
+import { updateCart } from "../utils/cartUtils";
+
+const initialState = localStorage.getItem('cart')
+    ? JSON.parse(localStorage.getItem('cart'))
+    : { cartItems: [] };
+>>>>>>> Stashed changes
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -22,18 +30,30 @@ const cartSlice = createSlice({
 
       if (existItem) {
         state.cartItems = state.cartItems.map((x) =>
+<<<<<<< Updated upstream
           x._id === existItem._id ? item : x
+=======
+            x._id === existItem._id ? { ...x, qty: x.qty + 1 } : x
+>>>>>>> Stashed changes
         );
       } else {
-        state.cartItems = [...state.cartItems, item];
+        state.cartItems = [...state.cartItems, { ...item, qty: 1 }];
       }
 
       return updateCart(state);
+<<<<<<< Updated upstream
 
     }
+=======
+    },
+    removeFromCart: (state, action) => {
+      state.cartItems = state.cartItems.filter((x) => x._id !== action.payload);
+      return updateCart(state);
+    },
+>>>>>>> Stashed changes
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

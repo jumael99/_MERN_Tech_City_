@@ -6,11 +6,12 @@ import {
     Route,
     RouterProvider
 } from 'react-router-dom'
-import './assets/styles/bootstrap.custom.css';
+import './assets/styles/bootstrap.custom.css'; //bootstrap css
 import './assets/styles/index.css'; /*custom css file*/
 import App from './App';
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
+import CartScreen from './screens/CartScreen';
 import store from "./store";
 import {Provider} from "react-redux";
 
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
         <Route path="/" element={ <App/> }>
             <Route path="/" element={ <HomeScreen /> }></Route>
             <Route path="/product/:id" element={ <ProductScreen/> } />
+            <Route path='/cart' element={ <CartScreen/> }></Route>
         </Route>
     )
 )

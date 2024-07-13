@@ -13,7 +13,7 @@ const authUser = asyncHandler( async (req,res) => {
 
     if (user && (await user.matchPassword(password))) {
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '1ds'
+            expiresIn: '1d'
         });
 
         // Set JWT as HTTP-Only cookie
@@ -47,7 +47,12 @@ const registerUser = asyncHandler( async (req,res) => {
 // @route   POST /api/users
 // @access  Private
 const logoutUser = asyncHandler( async (req,res) => {
-    res.send('logout user');
+    res.cookie('jwt', 'none', {
+        httpOnly:true,
+        expires: new Date(0)
+    })
+
+    res.status(200).json({ message: "Logged out successflly" });
 });
 
 

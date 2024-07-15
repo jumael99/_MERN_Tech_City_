@@ -17,7 +17,7 @@ const HomeScreen = () => {
             ) : (
                 <>
                     <div className="my-4">
-                        <h1 className="text-center text-3xl font-bold">Latest Products</h1>
+                        <h1 className="text-3xl font-bold">Latest Products</h1>
                     </div>
                     <Row>
                         {products.map((product) => (

@@ -6,6 +6,11 @@ main {
   min-height: 80vh;
 }
 
+.royalblue-navbar {
+  background-color: #003161;
+}
+
+
 .rating span {
   margin: 0.1rem;
 }

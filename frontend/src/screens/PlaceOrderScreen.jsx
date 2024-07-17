@@ -13,11 +13,13 @@ const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
-  const auth = useSelector((state) => state.auth);
 
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
+
+
   useEffect(() => {
+
     if (!cart.shippingAddress.address) {
       navigate('/shipping');
     } else if (!cart.paymentMethod) {
@@ -27,7 +29,17 @@ const PlaceOrderScreen = () => {
 
   const placeOrderHandler = async () => {
     try {
-      console.log('Placing order...');
+      console.log('Cart data:', cart);
+      console.log('Sending order data:', {
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      });
+
       const res = await createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
@@ -42,9 +54,13 @@ const PlaceOrderScreen = () => {
       navigate(`/order/${res._id}`);
     } catch (err) {
       console.error('Error placing order:', err);
-      console.error('Error details:', JSON.stringify(err, null, 2));
-      console.error('Error placing order:', err);
-      toast.error(err?.data?.message || err.error || 'An error occurred while placing the order.');
+      let errorMessage = 'An error occurred while placing the order.';
+      if (err.data) {
+        errorMessage = err.data.message || errorMessage;
+      } else if (err.error) {
+        errorMessage = err.error;
+      }
+      toast.error(errorMessage);
     }
   };
 

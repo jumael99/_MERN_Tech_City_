@@ -8,6 +8,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 url:`${USERS_URL}/auth`,
                 method: 'POST',
                 body: data,
+                credentials: 'include', // This is crucial for cookies
             }),
         }),  
         register: builder.mutation({

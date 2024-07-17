@@ -7,6 +7,8 @@ dotenv.config();
 import connectDB from './config/db.js'
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+
 const port = process.env.PORT || 5000;
 
 connectDB();
@@ -18,10 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
-app.use(cors());
 
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000', // Your frontend URL
+    credentials: true
 }));
 
 app.get('/', (req,res) => {
@@ -32,6 +34,7 @@ app.get('/', (req,res) => {
 /* /api/products dibo naki api/products evabe dibo */
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes)
 
 
 app.listen(port, ()=> {

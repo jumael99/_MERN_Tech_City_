@@ -8,6 +8,7 @@ import connectDB from './config/db.js'
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 const port = process.env.PORT || 5000;
 
@@ -34,7 +35,10 @@ app.get('/', (req,res) => {
 /* /api/products dibo naki api/products evabe dibo */
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRoutes)
+app.use('/api/orders', orderRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 
 app.listen(port, ()=> {

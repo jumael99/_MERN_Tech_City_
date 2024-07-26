@@ -7,6 +7,7 @@ import {useGetProductDetailsQuery} from "../slices/productsApiSlice";
 import Loader from '../components/Loader';
 import {useDispatch} from "react-redux";
 import {addToCart} from "../slices/cartSlice";
+import Message from "../components/Message";
 
 const ProductScreen = () => {
     const { id: productId } = useParams();
@@ -33,7 +34,7 @@ const ProductScreen = () => {
                 isLoading ? (
                     <Loader/>
                 ) : error ? (
-                    <h2>{error?.data?.message || error.error}</h2>
+                    <Message>{error?.data?.message || error.error}</Message>
                 ) : (
                     <div>
                         <Row>

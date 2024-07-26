@@ -19,8 +19,13 @@ import store from "./store";
 import {Provider} from "react-redux";
 import PaymentScreen from './screens/PaymentScreen'
 import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
-
+import OrderScreen from "./screens/OrderScreen";
+import ProfileScreen from "./screens/ProfileScreen"
+import OrderListScreen from "./screens/admin/OrderListScreen";
+import ProductListScreen from "./screens/admin/ProductListScreen";
+import ProductEditScreen from "./screens/admin/ProductEditScreen";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -36,6 +41,15 @@ const router = createBrowserRouter(
                 <Route path='/shipping' element ={ <ShippingScreen/> }> </Route>
                 <Route path='/payment' element={ < PaymentScreen /> } ></Route>
                 <Route path='/placeorder' element={ < PlaceOrderScreen /> } ></Route>
+                <Route path='/order/:id' element={ < OrderScreen /> } ></Route>
+                <Route path='/profile' element={ < ProfileScreen /> } ></Route>
+            </Route>
+
+            {/* Admin Routes */}
+            <Route path='' element={ <AdminRoute/> }>
+                <Route path='/admin/orderlist' element ={ <OrderListScreen/> }> </Route>
+                <Route path='/admin/productlist' element ={ <ProductListScreen/> }> </Route>
+                <Route path='/admin/product/:id/edit' element ={ <ProductEditScreen/> }> </Route>
             </Route>
         </Route>
     )

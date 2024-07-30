@@ -17,7 +17,7 @@ router.route('/mine').get(protect, getMyOrders);
 router.route('/:id').get(protect, getOrderById);
 router.route('/:id/pay').post(protect, updateOrderToPaidPost);
 router.route('/:id/deliver').put(protect, admin, updateOrderToDelivered);
-router.route('/payment-online/success/:tranId').post(paymentSuccess);
+router.route('/payment-online/success/:tranId').get(paymentSuccess);
 router.route('/payment-online/failure/:tranId').get(paymentFailure);
 
 export default router;

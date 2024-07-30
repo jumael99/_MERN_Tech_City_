@@ -1,10 +1,6 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Order from '../models/orderModel.js';
-import Product from '../models/productModel.js';
-import { calcPrices } from '../utils/calcPrices.js';
-import SSLCommerzPayment from 'sslcommerz-lts';
-import { ObjectId } from 'mongodb';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 const updateOrderToPaidPost = asyncHandler(async (req, res) => {
@@ -79,19 +75,36 @@ const updateOrderToPaidPost = asyncHandler(async (req, res) => {
 });
 
 const paymentSuccess = asyncHandler(async (req, res) => {
+  const { tranId } = req.params;
+  console.log('Received success callback for transaction:', tranId);
+
   try {
-    //added objectid solve this 
-      const updateOrder = await Order.findOne({ tranId: req.params.ObjectId });
+    const order = await Order.findOne({ tranId });
 
-      if (!updateOrder) {
-          return res.status(404).json({ message: "Order is not found" });
-      }
+    if (!order) {
+      console.log('Order not found for transaction:', tranId);
+      return res.status(404).json({ message: "Order not found" });
+    }
 
-      updateOrder.isPaid = true;
-      await updateOrder.save();
-      res.redirect(`http://localhost:3000/order/${updateOrder._id}`); //added updateOrder._id solve another one. 
+    if (!order.isPaid) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      order.paymentResult = {
+        id: tranId,
+        status: 'completed',
+        update_time: Date.now(),
+        email_address: req.body.value_d || '',  // Adjust based on SSLCommerz response
+      };
+
+      const updatedOrder = await order.save();
+      console.log('Order updated successfully:', updatedOrder._id);
+    }
+
+    // Redirect to the frontend success page
+    res.redirect(`${process.env.FRONTEND_URL}/payment-success/${tranId}`);
   } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+    console.error('Error in payment success handler:', error);
+    res.status(500).json({ message: 'Error processing payment success', error: error.message });
   }
 });
 

@@ -80,18 +80,19 @@ const updateOrderToPaidPost = asyncHandler(async (req, res) => {
 
 const paymentSuccess = asyncHandler(async (req, res) => {
   try {
-    //added objectid solve this 
-      const updateOrder = await Order.findOne({ tranId: req.params.ObjectId });
+    const order = await Order.findOne({ tranId: req.params.tranId });
 
-      if (!updateOrder) {
-          return res.status(404).json({ message: "Order is not found" });
-      }
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
 
-      updateOrder.isPaid = true;
-      await updateOrder.save();
-      res.redirect(`http://localhost:3000/order/${updateOrder._id}`); //added updateOrder._id solve another one. 
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    await order.save();
+
+    res.status(200).json({ message: "Payment successful", order });
   } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+    res.status(500).json({ message: error.message });
   }
 });
 

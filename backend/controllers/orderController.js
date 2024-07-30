@@ -34,7 +34,7 @@ const updateOrderToPaidPost = asyncHandler(async (req, res) => {
       currency: 'BDT',
       tran_id: tran_id,
       success_url: `http://localhost:5000/api/orders/payment-online/success/${tran_id}`,
-    fail_url: `${process.env.BASE_URL}/api/orders/payment-online/failure/${tran_id}`,
+      fail_url: `${process.env.BASE_URL}/api/orders/payment-online/failure/${tran_id}`,
       cancel_url: `${process.env.BASE_URL}/order/${order._id}`,
       ipn_url: `${process.env.BASE_URL}/api/orders/${order._id}/ipn`,
       shipping_method: 'Courier',
@@ -81,7 +81,7 @@ const updateOrderToPaidPost = asyncHandler(async (req, res) => {
 const paymentSuccess = asyncHandler(async (req, res) => {
   try {
     //added objectid solve this 
-      const updateOrder = await Order.findOne({ tranId: req.params.ObjectId });
+      const updateOrder = await Order.findOne({ tranId: req.params.tranId });
 
       if (!updateOrder) {
           return res.status(404).json({ message: "Order is not found" });

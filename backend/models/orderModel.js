@@ -6,6 +6,9 @@ const orderSchema = mongoose.Schema({
         required:true,
         ref:"User",
     },
+    tranId: {
+        type: String,
+    },
     orderItems: [{
         name: {type:String, required:true},
         qty: {type: Number, required:true},

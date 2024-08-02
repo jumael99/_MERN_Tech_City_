@@ -88,6 +88,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
       }
 
       updateOrder.isPaid = true;
+      updateOrder.paidAt = Date.now();
       await updateOrder.save();
       res.redirect(`http://localhost:3000/order/${updateOrder._id}`); //added updateOrder._id solve another one. 
   } catch (error) {

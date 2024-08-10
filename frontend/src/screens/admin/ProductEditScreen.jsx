@@ -37,10 +37,27 @@ const ProductEditScreen = () => {
 
     const navigate = useNavigate();
 
+    const uploadFileHandler = async (e) => {
+        const formData = new FormData();
+        formData.append('image', e.target.files[0]);
+        try {
+            console.log('Uploading image...');
+            const res = await uploadProductImage(formData).unwrap();
+            console.log('Upload response:', res);
+            toast.success(res.message);
+            setImage(res.image);
+            console.log('Image path set to:', res.image);
+        } catch (err) {
+            console.error('Upload error:', err);
+            toast.error(err?.data?.message || err.error);
+        }
+    };
+
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
-            await updateProduct({
+            console.log('Updating product with image path:', image);
+            const updatedProduct = await updateProduct({
                 productId,
                 name,
                 price,
@@ -49,11 +66,13 @@ const ProductEditScreen = () => {
                 category,
                 description,
                 countInStock,
-            }).unwrap(); // NOTE: here we need to unwrap the Promise to catch any rejection in our catch block
+            }).unwrap();
+            console.log('Update response:', updatedProduct);
             toast.success('Product updated');
             refetch();
             navigate('/admin/productlist');
         } catch (err) {
+            console.error('Update error:', err);
             toast.error(err?.data?.message || err.error);
         }
     };
@@ -69,30 +88,6 @@ const ProductEditScreen = () => {
             setDescription(product.description);
         }
     }, [product]);
-
-    const uploadFileHandler = async (e) => {
-        const formData = new FormData();
-        formData.append('image', e.target.files[0]);
-        try {
-            const res = await uploadProductImage(formData).unwrap();
-            console.log('Upload response:', res);
-            toast.success(res.message);
-
-            // Convert backslashes (including escaped ones) to forward slashes
-            const fixedImagePath = res.image.replace(/\\/g, '/');
-
-            // Ensure the path starts with a single forward slash
-            const normalizedPath = fixedImagePath.startsWith('//')
-                ? fixedImagePath.substring(1)
-                : fixedImagePath;
-
-            setImage(normalizedPath);
-            console.log('Normalized image path:', normalizedPath);
-        } catch (err) {
-            console.error('Upload error:', err);
-            toast.error(err?.data?.message || err.error);
-        }
-    };
 
     return (
         <>
@@ -137,9 +132,9 @@ const ProductEditScreen = () => {
                                 onChange={(e) => setImage(e.target.value)}
                             ></Form.Control>
                             <Form.Control
+                                type='file'
                                 label='Choose File'
                                 onChange={uploadFileHandler}
-                                type='file'
                             ></Form.Control>
                             {loadingUpload && <Loader />}
                         </Form.Group>

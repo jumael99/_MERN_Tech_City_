@@ -64,6 +64,9 @@ const ProductScreen = () => {
         }
     };
 
+    // Construct the image URL
+    const imageUrl = product ? `http://localhost:5000${product.image.startsWith('/') ? '' : '/'}${product.image.replace(/\\/g, '/')}` : '';
+
     return (
         <>
             <Link className='btn btn-light my-3' to='/'>
@@ -79,7 +82,16 @@ const ProductScreen = () => {
                 <>
                     <Row>
                         <Col md={6}>
-                            <Image src={product.image} alt={product.name} fluid />
+                            <Image
+                                src={imageUrl}
+                                alt={product.name}
+                                fluid
+                                onError={(e) => {
+                                    console.error('Image failed to load:', imageUrl);
+                                    e.target.src = 'https://via.placeholder.com/400';
+                                    e.target.alt = 'Image not found';
+                                }}
+                            />
                         </Col>
                         <Col md={3}>
                             <ListGroup variant='flush'>

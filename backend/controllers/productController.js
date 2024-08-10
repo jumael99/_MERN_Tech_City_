@@ -54,8 +54,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-    const { name, price, description, image, brand, category, countInStock } =
-        req.body;
+    const { name, price, description, image, brand, category, countInStock } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -68,7 +67,9 @@ const updateProduct = asyncHandler(async (req, res) => {
         product.category = category;
         product.countInStock = countInStock;
 
+        console.log('Updating product with image path:', image);
         const updatedProduct = await product.save();
+        console.log('Updated product:', updatedProduct);
         res.json(updatedProduct);
     } else {
         res.status(404);
@@ -80,6 +81,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @route   DELETE /api/products/:id
 // @access  Private/Admin
 const deleteProduct = asyncHandler(async (req, res) => {
+    //const product = await Product.findById(req.params.id);
     const product = await Product.findById(req.params.id);
 
     if (product) {

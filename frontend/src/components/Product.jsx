@@ -4,8 +4,6 @@ import Rating from './Rating'
 
 const Product = ({ product }) => {
     const imageUrl = `http://localhost:5000${product.image.startsWith('/') ? '' : '/'}${product.image.replace(/\\/g, '/')}`;
-    console.log('Product component - product:', product);
-    console.log('Product component - constructed image URL:', imageUrl);
 
     return (
         <div className="my-3 p-3 rounded-lg shadow-md bg-white">

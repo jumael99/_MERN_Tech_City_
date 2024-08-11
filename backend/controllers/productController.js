@@ -1,5 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from '../models/productModel.js'
+import Order from '../models/orderModel.js'
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -102,6 +103,18 @@ const createProductReview = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (product) {
+        // Check if the user has a paid order for the product
+        const paidOrder = await Order.findOne({
+            user: req.user._id,
+            'orderItems.product': req.params.id,
+            isPaid: true,
+        });
+
+        if (!paidOrder) {
+            res.status(400);
+            throw new Error("You've to purchase the product before reviewing");
+        }
+
         const alreadyReviewed = product.reviews.find(
             (r) => r.user.toString() === req.user._id.toString()
         );
@@ -133,6 +146,9 @@ const createProductReview = asyncHandler(async (req, res) => {
         throw new Error('Product not found');
     }
 });
+
+
+
 
 // @desc    Get top rated product
 // @route   GET /api/products/top

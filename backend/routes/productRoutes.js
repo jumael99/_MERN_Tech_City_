@@ -8,19 +8,21 @@ import {
   deleteProduct,
   createProductReview,
   getTopProducts,
+  getSellerProducts,
 } from "../controllers/productController.js";
 
-import { protect, admin } from "../middleware/authMiddleware.js";
+import { protect, admin, seller } from "../middleware/authMiddleware.js";
 
-router.route("/").get(getProducts).post(protect, admin, createProduct);
+router.route("/").get(getProducts).post(protect, seller, createProduct);
 
 router.get("/top", getTopProducts);
+router.get("/seller", protect, seller, getSellerProducts);
 
 router
   .route("/:id")
   .get(getProductById)
-  .put(protect, admin, updateProduct)
-  .delete(protect, admin, deleteProduct);
+  .put(protect, seller, updateProduct)
+  .delete(protect, seller, deleteProduct);
 
 router.route("/:id/reviews").post(protect, createProductReview);
 

@@ -1,39 +1,49 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "./asyncHandler.js";
-import User from '../models/userModel.js'
+import User from "../models/userModel.js";
 
-//Protect routes
+// Protect routes
 const protect = asyncHandler(async (req, res, next) => {
-    let token;
+  let token;
 
-    // Read the jwt from the cookie
-    token = req.cookies.jwt;
+  // Read the jwt from the cookie
+  token = req.cookies.jwt;
 
-    if (token) {
-        try {
-            // we want to decode the token
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = await User.findById(decoded.userId).select('-password')
-            next();
-        } catch (e) {
-            console.log(e);
-            res.status(401);
-            throw new Error('Not Authorized, token failed');
-        }
-    } else {
-        res.status(401);
-        throw new Error('Not Authorized, no token');
+  if (token) {
+    try {
+      // Decode the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.userId).select("-password");
+      next();
+    } catch (e) {
+      console.log(e);
+      res.status(401);
+      throw new Error("Not Authorized, token failed");
     }
-})
+  } else {
+    res.status(401);
+    throw new Error("Not Authorized, no token");
+  }
+});
 
 // Admin middleware
-const admin = (req,res,next) => {
-    if (req.user && req.user.isAdmin) {
-        next();
-    } else {
-        res.status(401);
-        throw new Error('Not authorized as admin');
-    }
-}
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Not authorized as admin");
+  }
+};
 
-export { protect, admin };
+// Seller middleware
+const seller = (req, res, next) => {
+  if (req.user && req.user.role === "seller") {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Not authorized as a seller");
+  }
+};
+
+export { protect, admin, seller };

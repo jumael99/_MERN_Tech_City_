@@ -23,9 +23,9 @@ export const orderApiSlice = apiSlice.injectEndpoints({
                 body: details,
             }),
         }),
-        getPaypalClientId: builder.query({
+        getsslcommerzClientId: builder.query({
             query: () => ({
-                url: PAYPAL_URL,
+                url: sslcommerz_URL,
             }),
             keepUnusedDataFor: 5,
         }),
@@ -54,7 +54,7 @@ export const {
     useCreateOrderMutation,
     useGetOrderDetailsQuery,
     usePayOrderMutation,
-    useGetPaypalClientIdQuery,
+    useGetsslcommerzClientIdQuery,
     useGetMyOrdersQuery,
     useGetOrdersQuery,
     useDeliverOrderMutation,

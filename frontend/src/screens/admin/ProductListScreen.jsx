@@ -11,6 +11,7 @@ import {
     useCreateProductMutation,
     useDeleteProductMutation
 } from '../../slices/productsApiSlice';
+import Title from '../../components/Title'
 
 const ProductListScreen = () => {
     const {pageNumber} = useParams();
@@ -45,7 +46,7 @@ const ProductListScreen = () => {
         <>
             <Row className='align-items-center'>
                 <Col>
-                    <h1>Products</h1>
+                    <Title>Products</Title>
                 </Col>
                 <Col className='text-end'>
                     <Button className='btn-sm m-3' onClick={createProductHandler} >

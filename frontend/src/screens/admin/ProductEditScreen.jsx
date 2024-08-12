@@ -10,6 +10,7 @@ import {
     useUpdateProductMutation,
     useUploadProductImageMutation,
 } from '../../slices/productsApiSlice';
+import Title from '../../components/Title'
 
 const ProductEditScreen = () => {
     const { id: productId } = useParams();
@@ -95,7 +96,7 @@ const ProductEditScreen = () => {
                 Go Back
             </Link>
             <FormContainer>
-                <h1>Edit Product</h1>
+                <Title>Edit Product</Title>
                 {loadingUpdate && <Loader />}
                 {isLoading ? (
                     <Loader />

@@ -17,6 +17,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import store from "./store";
 import {Provider} from "react-redux";
+import {HelmetProvider} from "react-helmet-async";
 import PaymentScreen from './screens/PaymentScreen'
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
@@ -68,9 +69,11 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-        <RouterProvider router={router}/>
-    </Provider>
+      <HelmetProvider>
+        <Provider store={store}>
+            <RouterProvider router={router}/>
+        </Provider>
+      </HelmetProvider>
   </React.StrictMode>
 );
 

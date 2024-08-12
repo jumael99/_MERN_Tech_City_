@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Title from '../components/Title'
 import {
   useGetOrderDetailsQuery,
   useDeliverOrderMutation,
@@ -72,7 +73,7 @@ const OrderScreen = () => {
 
   return (
     <>
-      <h1>Order {order._id}</h1>
+      <Title>Order {order._id}</Title>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>

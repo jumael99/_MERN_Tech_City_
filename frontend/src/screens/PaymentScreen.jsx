@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { savePaymentMethod } from '../slices/cartSlice';
+import Title from '../components/Title'
 
 const PaymentScreen = () => {
 
@@ -18,7 +19,7 @@ const PaymentScreen = () => {
         }
     }, [navigate, shippingAddress]);
 
-    const [paymentMethod, setPaymentMethod] = useState('PayPal');
+    const [paymentMethod, setPaymentMethod] = useState('sslcommerz');
 
     const dispatch = useDispatch();
 
@@ -32,7 +33,7 @@ const PaymentScreen = () => {
     return (
     <FormContainer>
         <CheckoutSteps step1 step2 step3 />
-        <h1>Payment Method</h1>
+        <Title>Payment Method</Title>
         <Form onSubmit={submitHandler}>
             <Form.Group>
                 <Form.Label as='legend'>Select Method</Form.Label>
@@ -40,10 +41,10 @@ const PaymentScreen = () => {
                     <Form.Check
                         type='radio'
                         className='my-2'
-                        label='PayPal or Credit Card'
-                        id='PayPal'
+                        label='sslcommerz'
+                        id='sslcommerz'
                         name='paymentMethod'
-                        value='PayPal'
+                        value='sslcommerz'
                         checked
                         onChange={(e)=>setPaymentMethod(e.target.value)}
                     ></Form.Check>

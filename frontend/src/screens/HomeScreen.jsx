@@ -7,6 +7,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
+import Title from '../components/Title'
 
 
 const HomeScreen = () => {
@@ -20,7 +21,10 @@ const HomeScreen = () => {
   return (
       <>
         {!keyword ? (
+            <div className="mt-4" >
+
             <ProductCarousel />
+            </div>
         ) : (
             <Link to='/' className='btn btn-light mb-4'>
               Go Back
@@ -34,7 +38,7 @@ const HomeScreen = () => {
             </Message>
         ) : (
             <>
-              <h1>Latest Products</h1>
+              <Title>Latest Products</Title>
               <Row>
                 {data.products.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>

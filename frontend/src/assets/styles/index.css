@@ -52,11 +52,20 @@ table th {
   margin-top: 10px;
 }
 
+.carousel-item {
+  height: 400px;
+}
+
 .carousel-caption {
-  position: absolute;
-  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 40px;
+  height: 40px;
 }

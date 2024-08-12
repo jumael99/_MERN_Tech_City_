@@ -4,13 +4,14 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useGetOrdersQuery } from '../../slices/ordersApiSlice';
 import { Link } from 'react-router-dom';
+import Title from '../../components/Title'
 
 const OrderListScreen = () => {
     const { data: orders, isLoading, error } = useGetOrdersQuery();
 
     return (
         <>
-            <h1>Orders</h1>
+            <Title>Orders</Title>
             {isLoading ? (
                 <Loader />
             ) : error ? (

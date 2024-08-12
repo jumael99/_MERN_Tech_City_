@@ -33,7 +33,7 @@ const Header = () => {
         <Navbar className="royalblue-navbar" variant="dark" expand="lg" collapseOnSelect >
           <Container>
             <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
-              <img src={logo} alt="TechCity" height="30" className="me-2" />
+              <img src={logo} alt="TechCity" className="h-12 me-2" />
               <span>TechCity</span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Title from '../components/Title'
 
 const PaymentFailureScreen = () => {
   const { tranId } = useParams();
@@ -15,7 +16,7 @@ const PaymentFailureScreen = () => {
 
   return (
     <div>
-      <h1>Payment Failed</h1>
+      <Title>Payment Failed</Title>
       <p>Your payment was not successful. Redirecting to order details...</p>
     </div>
   );

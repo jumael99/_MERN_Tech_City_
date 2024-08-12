@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useGetOrderDetailsQuery, usePayOrderMutation } from '../slices/ordersApiSlice';
+import Title from '../components/Title'
 
 const PaymentSuccessScreen = () => {
   const { tranId } = useParams();
@@ -47,7 +48,7 @@ const PaymentSuccessScreen = () => {
 
   return (
     <>
-      <h1>Payment Successful</h1>
+      <Title>Payment Successful</Title>
       {order && (
         <Row>
           <Col md={8}>

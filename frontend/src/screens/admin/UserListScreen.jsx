@@ -7,6 +7,7 @@ import {
     useGetUsersQuery,
     useDeleteUserMutation
 } from '../../slices/usersApiSlice';
+import Title from '../../components/Title'
 
 const UserListScreen = () => {
     const { data: users, refetch, isLoading, error } = useGetUsersQuery();
@@ -25,7 +26,7 @@ const UserListScreen = () => {
 
     return (
         <>
-            <h1>Users</h1>
+            <Title>Users</Title>
             {isLoading ? (
                 <Loader />
             ) : error ? (

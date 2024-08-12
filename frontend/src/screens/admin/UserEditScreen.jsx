@@ -10,6 +10,7 @@ import {
     useGetUserDetailsQuery,
     useUpdateUserMutation,
 } from '../../slices/usersApiSlice';
+import Title from '../../components/Title'
 
 const UserEditScreen = () => {
     const { id: userId } = useParams();
@@ -55,7 +56,7 @@ const UserEditScreen = () => {
                 Go Back
             </Link>
             <FormContainer>
-                <h1>Edit User</h1>
+                <Title>Edit User</Title>
                 {loadingUpdate && <Loader />}
                 {isLoading ? (
                     <Loader />

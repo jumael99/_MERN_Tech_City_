@@ -169,6 +169,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.isAdmin = Boolean(req.body.isAdmin);
+    user.role = req.body.role || user.role; // Add this line
 
     const updatedUser = await user.save();
 
@@ -177,6 +178,7 @@ const updateUser = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      role: updatedUser.role, // Add this line
     });
   } else {
     res.status(404);

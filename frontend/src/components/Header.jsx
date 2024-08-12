@@ -28,9 +28,6 @@ const Header = () => {
     }
   };
 
-  // Debugging: Log userInfo to check its structure
-  console.log("userInfo:", userInfo);
-
   return (
     <header>
       <Navbar

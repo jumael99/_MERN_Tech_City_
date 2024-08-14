@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
 const Product = ({ product }) => {
   const imageUrl = `http://localhost:5000${product.image.startsWith("/") ? "" : "/"}${product.image.replace(/\\/g, "/")}`;
 
@@ -29,7 +30,10 @@ const Product = ({ product }) => {
         </div>
 
         <Rating value={product.rating} text={`${product.numReviews} reviews`} />
-        <p className="text-2xl font-semibold text-gray-800">৳{product.price}</p>
+        <p className="text-2xl font-semibold text-gray-800">
+          <FontAwesomeIcon icon={faBangladeshiTakaSign} /> {""}
+          {product.price}
+        </p>
       </div>
     </div>
   );

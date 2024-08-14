@@ -1,15 +1,17 @@
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import Title from '../components/Title'
+import React, { useRef } from "react";
+import { Link, useParams } from "react-router-dom";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import Title from "../components/Title";
 import {
   useGetOrderDetailsQuery,
   useDeliverOrderMutation,
-} from '../slices/ordersApiSlice';
+} from "../slices/ordersApiSlice";
+import { useReactToPrint } from "react-to-print";
+import InvoicePrint from "../components/InvoicePrint";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -22,13 +24,20 @@ const OrderScreen = () => {
     error,
   } = useGetOrderDetailsQuery(orderId);
 
-  const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
+
+  const invoiceRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => invoiceRef.current,
+  });
 
   const deliverOrderHandler = async () => {
     try {
       await deliverOrder(orderId);
       refetch();
-      toast.success('Order delivered');
+      toast.success("Order delivered");
     } catch (err) {
       toast.error(err?.data?.message || err.message);
     }
@@ -36,29 +45,34 @@ const OrderScreen = () => {
 
   const payOrderHandler = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/pay`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `http://localhost:5000/api/orders/${orderId}/pay`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        throw new Error(
+          errorData.message || `HTTP error! status: ${response.status}`,
+        );
       }
 
       const result = await response.json();
-      console.log('Payment initiation successful:', result);
+      console.log("Payment initiation successful:", result);
 
       if (result.url) {
         window.location.href = result.url;
       } else {
-        toast.error('Failed to get payment URL');
+        toast.error("Failed to get payment URL");
       }
     } catch (error) {
-      console.error('Error initiating payment:', error);
+      console.error("Error initiating payment:", error);
       toast.error(`Error initiating payment: ${error.message}`);
     }
   };
@@ -68,7 +82,9 @@ const OrderScreen = () => {
   }
 
   if (error) {
-    return <Message variant='danger'>{error?.data?.message || error.error}</Message>;
+    return (
+      <Message variant="danger">{error?.data?.message || error.error}</Message>
+    );
   }
 
   return (
@@ -76,28 +92,28 @@ const OrderScreen = () => {
       <Title>Order {order._id}</Title>
       <Row>
         <Col md={8}>
-          <ListGroup variant='flush'>
+          <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
                 <strong>Name: </strong> {order.user.name}
               </p>
               <p>
-                <strong>Email: </strong>{' '}
+                <strong>Email: </strong>{" "}
                 <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
               </p>
               <p>
                 <strong>Address:</strong>
-                {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
-                {order.shippingAddress.postalCode},{' '}
+                {order.shippingAddress.address}, {order.shippingAddress.city}{" "}
+                {order.shippingAddress.postalCode},{" "}
                 {order.shippingAddress.country}
               </p>
               {order.isDelivered ? (
-                <Message variant='success'>
+                <Message variant="success">
                   Delivered on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message variant='danger'>Not Delivered</Message>
+                <Message variant="danger">Not Delivered</Message>
               )}
             </ListGroup.Item>
 
@@ -108,9 +124,9 @@ const OrderScreen = () => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant='success'>Paid on {order.paidAt}</Message>
+                <Message variant="success">Paid on {order.paidAt}</Message>
               ) : (
-                <Message variant='danger'>Not Paid</Message>
+                <Message variant="danger">Not Paid</Message>
               )}
             </ListGroup.Item>
 
@@ -119,7 +135,7 @@ const OrderScreen = () => {
               {order.orderItems.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
-                <ListGroup variant='flush'>
+                <ListGroup variant="flush">
                   {order.orderItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
@@ -149,7 +165,7 @@ const OrderScreen = () => {
         </Col>
         <Col md={4}>
           <Card>
-            <ListGroup variant='flush'>
+            <ListGroup variant="flush">
               <ListGroup.Item>
                 <h2>Order Summary</h2>
               </ListGroup.Item>
@@ -180,11 +196,23 @@ const OrderScreen = () => {
               {!order.isPaid && (
                 <ListGroup.Item>
                   <Button
-                    type='button'
-                    className='btn btn-block'
+                    type="button"
+                    className="btn btn-block"
                     onClick={payOrderHandler}
                   >
                     Pay with SSLCommerz
+                  </Button>
+                </ListGroup.Item>
+              )}
+
+              {order.isPaid && (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={handlePrint}
+                  >
+                    Download Invoice
                   </Button>
                 </ListGroup.Item>
               )}
@@ -197,8 +225,8 @@ const OrderScreen = () => {
                 !order.isDelivered && (
                   <ListGroup.Item>
                     <Button
-                      type='button'
-                      className='btn btn-block'
+                      type="button"
+                      className="btn btn-block"
                       onClick={deliverOrderHandler}
                     >
                       Mark As Delivered
@@ -209,6 +237,9 @@ const OrderScreen = () => {
           </Card>
         </Col>
       </Row>
+      <div style={{ display: "none" }}>
+        <InvoicePrint ref={invoiceRef} order={order} />
+      </div>
     </>
   );
 };

@@ -1,5 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Row,
   Col,
@@ -8,10 +8,13 @@ import {
   Form,
   Button,
   Card,
-} from 'react-bootstrap';
-import { FaTrash } from 'react-icons/fa';
+} from "react-bootstrap";
+import { FaTrash } from "react-icons/fa";
+import Title from "../components/Title";
 
-import { addToCart, removeFromCart } from '../slices/cartSlice';
+import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -29,32 +32,45 @@ const CartScreen = () => {
   };
 
   const checkoutHandler = () => {
-    navigate('/login?redirect=/shipping');
-  }
+    navigate("/login?redirect=/shipping");
+  };
 
   return (
     <Row>
       <Col md={8}>
-        <h1 className='text-3xl m-4'>Shopping Cart</h1>
+        <Title>Shopping Cart</Title>
         {cartItems.length === 0 ? (
           <div>
-            Your cart is empty <Link to='/'>Go Back</Link>
+            Your cart is empty <Link to="/">Go Back</Link>
           </div>
         ) : (
-          <ListGroup variant='flush'>
+          <ListGroup variant="flush">
             {cartItems.map((item) => (
               <ListGroup.Item key={item._id}>
                 <Row>
                   <Col md={2}>
-                    <Image src={item.image} alt={item.name} fluid rounded />
+                    <Image
+                      src={`http://localhost:5000${item.image.startsWith("/") ? "" : "/"}${item.image.replace(/\\/g, "/")}`}
+                      alt={item.name}
+                      fluid
+                      rounded
+                      onError={(e) => {
+                        console.error("Image failed to load:", item.image);
+                        e.target.src = "https://via.placeholder.com/100";
+                        e.target.alt = "Image not found";
+                      }}
+                    />
                   </Col>
                   <Col md={3}>
                     <Link to={`/product/${item._id}`}>{item.name}</Link>
                   </Col>
-                  <Col md={2}>${item.price}</Col>
+                  <Col md={2}>
+                    <FontAwesomeIcon icon={faBangladeshiTakaSign} /> {""}
+                    {item.price}
+                  </Col>
                   <Col md={2}>
                     <Form.Control
-                      as='select'
+                      as="select"
                       value={item.qty}
                       onChange={(e) =>
                         addToCartHandler(item, Number(e.target.value))
@@ -69,8 +85,8 @@ const CartScreen = () => {
                   </Col>
                   <Col md={2}>
                     <Button
-                      type='button'
-                      variant='light'
+                      type="button"
+                      variant="light"
                       onClick={() => removeFromCartHandler(item._id)}
                     >
                       <FaTrash />
@@ -82,23 +98,23 @@ const CartScreen = () => {
           </ListGroup>
         )}
       </Col>
-      <Col md={4} className='mt-4'>
+      <Col md={4} className="mt-4">
         <Card>
-          <ListGroup variant='flush'>
+          <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>
                 Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
                 items
               </h2>
-              ৳
+              <FontAwesomeIcon icon={faBangladeshiTakaSign} /> {""}
               {cartItems
                 .reduce((acc, item) => acc + item.qty * item.price, 0)
                 .toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
               <Button
-                type='button'
-                className='btn-block'
+                type="button"
+                className="btn-block"
                 disabled={cartItems.length === 0}
                 onClick={checkoutHandler}
               >

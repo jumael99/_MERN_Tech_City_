@@ -1,167 +1,274 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Form, Button, Row, Col } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { FaTimes } from 'react-icons/fa'
-import { useProfileMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
-import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
+import React, { useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
+import { Link, useParams } from "react-router-dom";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useReactToPrint } from "react-to-print";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import Title from "../components/Title";
+import {
+  useGetOrderDetailsQuery,
+  useDeliverOrderMutation,
+} from "../slices/ordersApiSlice";
 
-const ProfileScreen = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+const OrderScreen = () => {
+  // ... (previous code remains the same)
 
-    const { userInfo } = useSelector((state) => state.auth);
+  const handlePrintInvoice = useReactToPrint({
+    content: () => invoiceRef.current,
+    documentTitle: `Invoice_${order?._id}`,
+    onAfterPrint: () => toast.success("Invoice PDF generated successfully"),
+  });
 
-    const { data: orders, isLoading, error } = useGetMyOrdersQuery();
+  // ... (rest of the component code remains the same)
 
-    useEffect(() => {
-        setName(userInfo.name);
-        setEmail(userInfo.email);
-    }, [userInfo.email, userInfo.name]);
+  return (
+    <>
+      {/* ... (previous JSX remains the same) */}
 
-    const [updateProfile, { isLoading: loadingUpdateProfile }] =
-        useProfileMutation();
+      {/* Invoice content (hidden, used for PDF generation) */}
+      <div style={{ display: "none" }}>
+        <div
+          ref={invoiceRef}
+          style={{
+            padding: "40px",
+            fontFamily: "Arial, sans-serif",
+            maxWidth: "800px",
+            margin: "0 auto",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "20px",
+            }}
+          >
+            <div>
+              <img
+                src="/api/placeholder/200/100"
+                alt="Company Logo"
+                style={{ maxWidth: "200px", height: "auto" }}
+              />
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <h1 style={{ color: "#4a4a4a", marginBottom: "10px" }}>
+                Invoice
+              </h1>
+              <p style={{ margin: "0", color: "#777" }}>
+                Invoice #: {order._id}
+              </p>
+              <p style={{ margin: "0", color: "#777" }}>
+                Date: {new Date().toLocaleDateString()}
+              </p>
+            </div>
+          </div>
 
-    const dispatch = useDispatch();
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "40px",
+            }}
+          >
+            <div>
+              <h3 style={{ color: "#4a4a4a", marginBottom: "10px" }}>
+                Bill To:
+              </h3>
+              <p style={{ margin: "0", color: "#777" }}>{order.user.name}</p>
+              <p style={{ margin: "0", color: "#777" }}>{order.user.email}</p>
+              <p style={{ margin: "0", color: "#777" }}>
+                {order.shippingAddress.address}
+              </p>
+              <p style={{ margin: "0", color: "#777" }}>
+                {order.shippingAddress.city}, {order.shippingAddress.postalCode}
+              </p>
+              <p style={{ margin: "0", color: "#777" }}>
+                {order.shippingAddress.country}
+              </p>
+            </div>
+            <div>
+              <h3 style={{ color: "#4a4a4a", marginBottom: "10px" }}>
+                Ship To:
+              </h3>
+              <p style={{ margin: "0", color: "#777" }}>
+                {order.shippingAddress.address}
+              </p>
+              <p style={{ margin: "0", color: "#777" }}>
+                {order.shippingAddress.city}, {order.shippingAddress.postalCode}
+              </p>
+              <p style={{ margin: "0", color: "#777" }}>
+                {order.shippingAddress.country}
+              </p>
+            </div>
+          </div>
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        if (password !== confirmPassword) {
-            toast.error('Passwords do not match');
-        } else {
-            try {
-                const res = await updateProfile({
-                    _id: userInfo._id,
-                    name,
-                    email,
-                    password,
-                }).unwrap();
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              marginBottom: "40px",
+            }}
+          >
+            <thead>
+              <tr style={{ backgroundColor: "#f8f8f8" }}>
+                <th
+                  style={{
+                    padding: "12px",
+                    textAlign: "left",
+                    borderBottom: "2px solid #ddd",
+                  }}
+                >
+                  Item
+                </th>
+                <th
+                  style={{
+                    padding: "12px",
+                    textAlign: "right",
+                    borderBottom: "2px solid #ddd",
+                  }}
+                >
+                  Quantity
+                </th>
+                <th
+                  style={{
+                    padding: "12px",
+                    textAlign: "right",
+                    borderBottom: "2px solid #ddd",
+                  }}
+                >
+                  Price
+                </th>
+                <th
+                  style={{
+                    padding: "12px",
+                    textAlign: "right",
+                    borderBottom: "2px solid #ddd",
+                  }}
+                >
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {order.orderItems.map((item, index) => (
+                <tr key={index}>
+                  <td
+                    style={{ padding: "12px", borderBottom: "1px solid #ddd" }}
+                  >
+                    {item.name}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      textAlign: "right",
+                      borderBottom: "1px solid #ddd",
+                    }}
+                  >
+                    {item.qty}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      textAlign: "right",
+                      borderBottom: "1px solid #ddd",
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
+                    {item.price.toFixed(2)}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      textAlign: "right",
+                      borderBottom: "1px solid #ddd",
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
+                    {(item.qty * item.price).toFixed(2)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-                dispatch(setCredentials({ ...res }));
-                toast.success('Profile updated successfully');
-            } catch (err) {
-                toast.error(err?.data?.message || err.error);
-            }
-        }
-    };
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div style={{ width: "300px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "10px",
+                }}
+              >
+                <span style={{ color: "#777" }}>Subtotal:</span>
+                <span>
+                  <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
+                  {order.itemsPrice.toFixed(2)}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "10px",
+                }}
+              >
+                <span style={{ color: "#777" }}>Shipping:</span>
+                <span>
+                  <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
+                  {order.shippingPrice.toFixed(2)}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "10px",
+                }}
+              >
+                <span style={{ color: "#777" }}>Tax:</span>
+                <span>
+                  <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
+                  {order.taxPrice.toFixed(2)}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #ddd",
+                  paddingTop: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                <span>Total:</span>
+                <span>
+                  <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
+                  {order.totalPrice.toFixed(2)}
+                </span>
+              </div>
+            </div>
+          </div>
 
-    const formatDate = (dateString) => {
-        return dateString ? new Date(dateString).toLocaleDateString() : 'N/A';
-    };
-
-    return (
-        <Row>
-            <Col md={3}>
-                <h2>User Profile</h2>
-
-                <Form onSubmit={submitHandler}>
-                    <Form.Group className='my-2' controlId='name'>
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control
-                            type='name'
-                            placeholder='Enter name'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        ></Form.Control>
-                    </Form.Group>
-
-                    <Form.Group className='my-2' controlId='email'>
-                        <Form.Label>Email Address</Form.Label>
-                        <Form.Control
-                            type='email'
-                            placeholder='Enter email'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        ></Form.Control>
-                    </Form.Group>
-
-                    <Form.Group className='my-2' controlId='password'>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type='password'
-                            placeholder='Enter password'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        ></Form.Control>
-                    </Form.Group>
-
-                    <Form.Group className='my-2' controlId='confirmPassword'>
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control
-                            type='password'
-                            placeholder='Confirm password'
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        ></Form.Control>
-                    </Form.Group>
-
-                    <Button type='submit' variant='primary'>
-                        Update
-                    </Button>
-                    {loadingUpdateProfile && <Loader />}
-                </Form>
-            </Col>
-            <Col md={9}>
-                <h2>My Orders</h2>
-                {isLoading ? (
-                    <Loader />
-                ) : error ? (
-                    <Message variant='danger'>
-                        {error?.data?.message || error.error}
-                    </Message>
-                ) : (
-                    <Table striped hover responsive className='table-sm'>
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>DATE</th>
-                            <th>TOTAL</th>
-                            <th>PAID</th>
-                            <th>DELIVERED</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {orders.map((order) => (
-                            <tr key={order._id}>
-                                <td>{order._id}</td>
-                                <td>{formatDate(order.createdAt)}</td>
-                                <td>${order.totalPrice.toFixed(2)}</td>
-                                <td>
-                                    {order.isPaid ? (
-                                        <span>✔️</span>
-                                    ) : (
-                                        <FaTimes style={{ color: 'red' }} />
-                                    )}
-                                </td>
-                                <td>
-                                    {order.isDelivered ? (
-                                        formatDate(order.deliveredAt)
-                                    ) : (
-                                        <FaTimes style={{ color: 'red' }} />
-                                    )}
-                                </td>
-                                <td>
-                                    <LinkContainer to={`/order/${order._id}`}>
-                                        <Button className='btn-sm' variant='light'>
-                                            Details
-                                        </Button>
-                                    </LinkContainer>
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </Table>
-                )}
-            </Col>
-        </Row>
-    );
+          <div
+            style={{
+              marginTop: "40px",
+              borderTop: "1px solid #ddd",
+              paddingTop: "20px",
+              textAlign: "center",
+              color: "#777",
+            }}
+          >
+            <p>Thank you for your business!</p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
-export default ProfileScreen;
+export default OrderScreen;

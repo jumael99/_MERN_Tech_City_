@@ -31,7 +31,7 @@ const Header = () => {
   return (
     <header>
       <Navbar
-        className="royalblue-navbar"
+        // className="royalblue-navbar"
         variant="dark"
         expand="lg"
         collapseOnSelect

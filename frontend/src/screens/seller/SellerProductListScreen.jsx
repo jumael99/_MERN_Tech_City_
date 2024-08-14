@@ -1,3 +1,5 @@
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { useParams } from "react-router-dom";
 import { Table, Button, Row, Col } from "react-bootstrap";
@@ -15,9 +17,16 @@ import Title from "../../components/Title";
 
 const SellerProductListScreen = () => {
   const { pageNumber } = useParams();
+
   const { data, isLoading, error, refetch } = useGetSellerProductsQuery({
-    pageNumber: pageNumber || 1, // Ensure pageNumber is defined
+    pageNumber: pageNumber || 1,
   });
+
+  const { userInfo } = useSelector((state) => state.auth);
+  useEffect(() => {
+    refetch();
+  }, [userInfo, refetch]);
+
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
   const [deleteProduct, { isLoading: loadingDelete }] =
@@ -45,9 +54,6 @@ const SellerProductListScreen = () => {
       }
     }
   };
-
-  // Debugging: Log the data to check its structure
-  console.log("Seller products data:", data);
 
   return (
     <>
@@ -117,7 +123,7 @@ const SellerProductListScreen = () => {
             </tbody>
           </Table>
           {data?.pages && data?.page && (
-            <Paginate pages={data.pages} page={data.page} isAdmin={false} />
+            <Paginate pages={data.pages} page={data.page} userRole="seller" />
           )}
         </>
       )}

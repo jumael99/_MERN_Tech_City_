@@ -193,7 +193,7 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
+              {!order.isPaid && !(order.paymentMethod === "cod") && (
                 <ListGroup.Item>
                   <Button
                     type="button"
@@ -205,7 +205,7 @@ const OrderScreen = () => {
                 </ListGroup.Item>
               )}
 
-              {order.isPaid && (
+              {(order.isPaid || order.paymentMethod === "cod") && (
                 <ListGroup.Item>
                   <Button
                     type="button"

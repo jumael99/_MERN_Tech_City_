@@ -34,7 +34,7 @@ const updateOrderToPaidPost = asyncHandler(async (req, res) => {
       currency: "BDT",
       tran_id: tran_id,
       success_url: `http://localhost:5000/api/orders/payment-online/success/${tran_id}`,
-      fail_url: `${process.env.BASE_URL}/api/orders/payment-online/failure/${tran_id}`,
+      fail_url: `http://localhost:5000/api/orders/payment-online/failure/${tran_id}`,
       cancel_url: `${process.env.BASE_URL}/order/${order._id}`,
       ipn_url: `${process.env.BASE_URL}/api/orders/${order._id}/ipn`,
       shipping_method: "Courier",
@@ -101,18 +101,20 @@ const paymentSuccess = asyncHandler(async (req, res) => {
 });
 
 const paymentFailure = asyncHandler(async (req, res) => {
+  console.log("Payment failure endpoint hit. tranId:", req.params.tranId);
   try {
-    const order = await Order.findOne({ tranId: req.params.tranId });
+    const updateOrder = await Order.findOne({ tranId: req.params.tranId });
 
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+    if (!updateOrder) {
+      return res.status(404).json({ message: "Order is not found" });
     }
 
-    res.redirect(
-      `${process.env.FRONTEND_URL}/payment-failure/${req.params.tranId}`,
-    );
+    const redirectUrl = `http://localhost:3000/order/${updateOrder._id}`;
+    res.redirect(redirectUrl);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.redirect(
+      `http://localhost:3000/payment-error?message=${encodeURIComponent(error.message)}`,
+    );
   }
 });
 

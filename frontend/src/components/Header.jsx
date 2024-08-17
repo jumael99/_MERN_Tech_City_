@@ -1,13 +1,13 @@
 import React from "react";
 import { Navbar, Nav, Container, NavDropdown, Badge } from "react-bootstrap";
-import { FaShoppingCart, FaUser } from "react-icons/fa";
+import { FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import SearchBox from "./SearchBox";
-import "../assets/styles/index.css";
+import "../assets/styles/header.css";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -31,36 +31,36 @@ const Header = () => {
   return (
     <header>
       <Navbar
-        className="royalblue-navbar"
+        className="custom-navbar"
         variant="dark"
         expand="lg"
         collapseOnSelect
       >
-        <Container>
-          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
-            <img src={logo} alt="TechCity" className="h-12 me-2" />
-            <span>TechCity</span>
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/" className="brand-container">
+            <img src={logo} alt="TechCity" className="brand-logo" />
+            <span className="brand-name">TechCity</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <SearchBox className="mx-auto" />
-            <Nav className="ms-auto">
-              <Nav.Link
-                as={Link}
-                to="/cart"
-                className="d-flex align-items-center"
-              >
-                <FaShoppingCart className="me-1" />
-                Cart
+            <SearchBox className="search-box-container" />
+            <Nav className="ms-auto nav-links">
+              <Nav.Link as={Link} to="/cart" className="cart-link">
+                <FaShoppingCart className="icon" />
+                <span>Cart</span>
                 {cartItems.length > 0 && (
-                  <Badge pill bg="danger" className="ms-1">
+                  <Badge pill bg="danger" className="cart-badge">
                     {cartItems.reduce((a, c) => a + c.qty, 0)}
                   </Badge>
                 )}
               </Nav.Link>
               {userInfo ? (
                 <>
-                  <NavDropdown title={userInfo.name} id="username">
+                  <NavDropdown
+                    title={userInfo.name}
+                    id="username"
+                    className="user-dropdown"
+                  >
                     <NavDropdown.Item as={Link} to="/profile">
                       Profile
                     </NavDropdown.Item>
@@ -69,7 +69,11 @@ const Header = () => {
                     </NavDropdown.Item>
                   </NavDropdown>
                   {userInfo.isAdmin && (
-                    <NavDropdown title="Admin" id="adminmenu">
+                    <NavDropdown
+                      title="Admin"
+                      id="adminmenu"
+                      className="admin-dropdown"
+                    >
                       <NavDropdown.Item as={Link} to="/admin/productlist">
                         Products
                       </NavDropdown.Item>
@@ -82,7 +86,11 @@ const Header = () => {
                     </NavDropdown>
                   )}
                   {userInfo.role === "seller" && (
-                    <NavDropdown title="Seller" id="sellermenu">
+                    <NavDropdown
+                      title="Seller"
+                      id="sellermenu"
+                      className="seller-dropdown"
+                    >
                       <NavDropdown.Item as={Link} to="/seller/productlist">
                         My Products
                       </NavDropdown.Item>
@@ -93,13 +101,9 @@ const Header = () => {
                   )}
                 </>
               ) : (
-                <Nav.Link
-                  as={Link}
-                  to="/login"
-                  className="d-flex align-items-center"
-                >
-                  Sign In
-                  <FaUser className="ms-1" />
+                <Nav.Link as={Link} to="/login" className="signin-link">
+                  <span>Sign In</span>
+                  <FaUser className="icon" />
                 </Nav.Link>
               )}
             </Nav>

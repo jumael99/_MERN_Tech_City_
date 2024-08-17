@@ -14,6 +14,8 @@ import {
   useDeleteProductMutation,
 } from "../../slices/productsApiSlice";
 import Title from "../../components/Title";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SellerProductListScreen = () => {
   const { pageNumber } = useParams();
@@ -96,7 +98,13 @@ const SellerProductListScreen = () => {
                   <tr key={product._id}>
                     <td>{product._id}</td>
                     <td>{product.name}</td>
-                    <td>${product.price}</td>
+                    <td>
+                      <FontAwesomeIcon
+                        icon={faBangladeshiTakaSign}
+                        className="mr-1"
+                      />
+                      {product.price}
+                    </td>
                     <td>{product.category}</td>
                     <td>{product.brand}</td>
                     <td>

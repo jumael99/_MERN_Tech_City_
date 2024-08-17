@@ -12,6 +12,8 @@ import {
 } from "../slices/ordersApiSlice";
 import { useReactToPrint } from "react-to-print";
 import InvoicePrint from "../components/InvoicePrint";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -141,7 +143,7 @@ const OrderScreen = () => {
                       <Row>
                         <Col md={1}>
                           <Image
-                            src={item.image}
+                            src={`http://localhost:5000${item.image.startsWith("/") ? "" : "/"}${item.image.replace(/\\/g, "/")}`}
                             alt={item.name}
                             fluid
                             rounded
@@ -153,7 +155,17 @@ const OrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x{" "}
+                          <FontAwesomeIcon
+                            icon={faBangladeshiTakaSign}
+                            className="mr-1"
+                          />
+                          {item.price} ={" "}
+                          <FontAwesomeIcon
+                            icon={faBangladeshiTakaSign}
+                            className="mr-1"
+                          />
+                          {item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -172,25 +184,49 @@ const OrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${order.itemsPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {order.itemsPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {order.shippingPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {order.taxPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {order.totalPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               {!order.isPaid && !(order.paymentMethod === "cod") && (

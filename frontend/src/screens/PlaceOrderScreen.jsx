@@ -7,6 +7,8 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import Loader from "../components/Loader";
 import { useCreateOrderMutation } from "../slices/ordersApiSlice";
 import { clearCartItems } from "../slices/cartSlice";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
@@ -79,7 +81,7 @@ const PlaceOrderScreen = () => {
                       <Row>
                         <Col md={1}>
                           <Image
-                            src={item.image}
+                            src={`http://localhost:5000${item.image.startsWith("/") ? "" : "/"}${item.image.replace(/\\/g, "/")}`}
                             alt={item.name}
                             fluid
                             rounded
@@ -91,7 +93,16 @@ const PlaceOrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = $
+                          {item.qty} x{" "}
+                          <FontAwesomeIcon
+                            icon={faBangladeshiTakaSign}
+                            className="mr-1"
+                          />
+                          {item.price} ={" "}
+                          <FontAwesomeIcon
+                            icon={faBangladeshiTakaSign}
+                            className="mr-1"
+                          />
                           {(item.qty * (item.price * 100)) / 100}
                         </Col>
                       </Row>
@@ -111,25 +122,49 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {cart.itemsPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {cart.shippingPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {cart.taxPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {cart.totalPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>

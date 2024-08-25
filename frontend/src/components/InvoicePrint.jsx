@@ -1,4 +1,6 @@
 import React from "react";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const InvoicePrint = React.forwardRef(({ order }, ref) => {
   return (
@@ -27,20 +29,40 @@ const InvoicePrint = React.forwardRef(({ order }, ref) => {
             <tr key={item._id}>
               <td>{item.name}</td>
               <td>{item.qty}</td>
-              <td>${item.price}</td>
-              <td>${item.qty * item.price}</td>
+              <td>
+                <FontAwesomeIcon
+                  icon={faBangladeshiTakaSign}
+                  className="mr-1"
+                />
+                {item.price}
+              </td>
+              <td>
+                <FontAwesomeIcon
+                  icon={faBangladeshiTakaSign}
+                  className="mr-1"
+                />
+                {item.qty * item.price}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="text-end">
-        <strong>Subtotal:</strong> ${order.itemsPrice}
+        <strong>Subtotal:</strong>{" "}
+        <FontAwesomeIcon icon={faBangladeshiTakaSign} className="mr-1" />
+        {order.itemsPrice}
         <br />
-        <strong>Shipping:</strong> ${order.shippingPrice}
+        <strong>Shipping:</strong>{" "}
+        <FontAwesomeIcon icon={faBangladeshiTakaSign} className="mr-1" />
+        {order.shippingPrice}
         <br />
-        <strong>Tax:</strong> ${order.taxPrice}
+        <strong>Tax:</strong>{" "}
+        <FontAwesomeIcon icon={faBangladeshiTakaSign} className="mr-1" />
+        {order.taxPrice}
         <br />
-        <strong>Total:</strong> ${order.totalPrice}
+        <strong>Total:</strong>{" "}
+        <FontAwesomeIcon icon={faBangladeshiTakaSign} className="mr-1" />
+        {order.totalPrice}
       </div>
     </div>
   );

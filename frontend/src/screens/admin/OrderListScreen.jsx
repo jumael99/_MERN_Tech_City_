@@ -7,6 +7,8 @@ import { useGetOrdersQuery } from "../../slices/ordersApiSlice";
 import { Link } from "react-router-dom";
 import Title from "../../components/Title";
 import { useReactToPrint } from "react-to-print";
+import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const OrderListScreen = () => {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
@@ -123,7 +125,13 @@ const OrderListScreen = () => {
                   <td>{order._id}</td>
                   <td>{order.user && order.user.name}</td>
                   <td>{order.createdAt?.substring(0, 10)}</td>
-                  <td>${order.totalPrice}</td>
+                  <td>
+                    <FontAwesomeIcon
+                      icon={faBangladeshiTakaSign}
+                      className="mr-1"
+                    />
+                    {order.totalPrice}
+                  </td>
                   <td>
                     {order.isPaid ? (
                       order.paidAt?.substring(0, 10)

@@ -13,6 +13,7 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("user"); // Default role is "user"
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const RegisterScreen = () => {
       return;
     } else {
       try {
-        const res = await register({ name, email, password }).unwrap();
+        const res = await register({ name, email, password, role }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate(redirect);
       } catch (err) {
@@ -112,6 +113,18 @@ const RegisterScreen = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           ></Form.Control>
+        </Form.Group>
+
+        <Form.Group controlId="role" className="my-3">
+          <Form.Label>Role</Form.Label>
+          <Form.Control
+            as="select"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="user">Want to join as a User</option>
+            <option value="seller">Want to join as a Seller</option>
+          </Form.Control>
         </Form.Group>
 
         <Button

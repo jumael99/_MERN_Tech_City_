@@ -1,4 +1,3 @@
-// frontend/src/screens/seller/SellerProductEditScreen.jsx
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
@@ -53,6 +52,24 @@ const SellerProductEditScreen = () => {
       console.error("Upload error:", err);
       toast.error(err?.data?.message || err.error);
     }
+  };
+
+  const handlePriceChange = (e) => {
+    const value = Number(e.target.value);
+    if (value < 0) {
+      toast.error("Price cannot be negative");
+      return;
+    }
+    setPrice(value);
+  };
+
+  const handleCountInStockChange = (e) => {
+    const value = Number(e.target.value);
+    if (value < 0) {
+      toast.error("Count in stock cannot be negative");
+      return;
+    }
+    setCountInStock(value);
   };
 
   const submitHandler = async (e) => {
@@ -121,7 +138,7 @@ const SellerProductEditScreen = () => {
                 type="number"
                 placeholder="Enter price"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={handlePriceChange}
               ></Form.Control>
             </Form.Group>
 
@@ -157,7 +174,7 @@ const SellerProductEditScreen = () => {
                 type="number"
                 placeholder="Enter countInStock"
                 value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
+                onChange={handleCountInStockChange}
               ></Form.Control>
             </Form.Group>
 

@@ -8,27 +8,19 @@ function addDecimals(num) {
 // correct to call it passing a string as the argument.
 
 export function calcPrices(orderItems) {
-  // Calculate the items price in whole number (pennies) to avoid issues with
-  // floating point number calculations
-  const itemsPrice = orderItems.reduce(
-    (acc, item) => acc + (item.price * 100 * item.qty) / 100,
-    0,
+  const itemsPrice = Math.round(
+    orderItems.reduce((acc, item) => acc + item.price * item.qty, 0),
   );
 
-  // Calculate the shipping price
-  const shippingPrice = itemsPrice > 100 ? 0 : 10;
+  const shippingPrice = 80; // This is already an integer.
+  const taxPrice = Math.round((2 / 100) * itemsPrice);
 
-  // Calculate the tax price
-  const taxPrice = 1 * itemsPrice;
+  const totalPrice = Math.round(itemsPrice + shippingPrice + taxPrice);
 
-  // Calculate the total price
-  const totalPrice = itemsPrice + shippingPrice + taxPrice;
-
-  // return prices as strings fixed to 2 decimal places
   return {
-    itemsPrice: addDecimals(itemsPrice),
-    shippingPrice: addDecimals(shippingPrice),
-    taxPrice: addDecimals(taxPrice),
-    totalPrice: addDecimals(totalPrice),
+    itemsPrice,
+    shippingPrice,
+    taxPrice,
+    totalPrice,
   };
 }

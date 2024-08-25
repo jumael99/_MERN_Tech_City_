@@ -103,7 +103,7 @@ const PlaceOrderScreen = () => {
                             icon={faBangladeshiTakaSign}
                             className="mr-1"
                           />
-                          {(item.qty * (item.price * 100)) / 100}
+                          {Math.round(item.qty * item.price)}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -127,7 +127,7 @@ const PlaceOrderScreen = () => {
                       icon={faBangladeshiTakaSign}
                       className="mr-1"
                     />
-                    {cart.itemsPrice}
+                    {Math.round(cart.itemsPrice)}
                   </Col>
                 </Row>
               </ListGroup.Item>
@@ -139,7 +139,7 @@ const PlaceOrderScreen = () => {
                       icon={faBangladeshiTakaSign}
                       className="mr-1"
                     />
-                    {cart.shippingPrice}
+                    {Math.round(cart.shippingPrice)}
                   </Col>
                 </Row>
               </ListGroup.Item>
@@ -151,7 +151,7 @@ const PlaceOrderScreen = () => {
                       icon={faBangladeshiTakaSign}
                       className="mr-1"
                     />
-                    {cart.taxPrice}
+                    {Math.round(cart.taxPrice)}
                   </Col>
                 </Row>
               </ListGroup.Item>
@@ -163,7 +163,7 @@ const PlaceOrderScreen = () => {
                       icon={faBangladeshiTakaSign}
                       className="mr-1"
                     />
-                    {cart.totalPrice}
+                    {Math.round(cart.totalPrice)}
                   </Col>
                 </Row>
               </ListGroup.Item>

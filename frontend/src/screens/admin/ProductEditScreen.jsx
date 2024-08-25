@@ -52,6 +52,24 @@ const ProductEditScreen = () => {
     }
   };
 
+  const handlePriceChange = (e) => {
+    const value = Number(e.target.value);
+    if (value < 0) {
+      toast.error("Price cannot be negative");
+      return;
+    }
+    setPrice(value);
+  };
+
+  const handleCountInStockChange = (e) => {
+    const value = Number(e.target.value);
+    if (value < 0) {
+      toast.error("Count in stock cannot be negative");
+      return;
+    }
+    setCountInStock(value);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -118,7 +136,7 @@ const ProductEditScreen = () => {
                 type="number"
                 placeholder="Enter price"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={handlePriceChange}
               ></Form.Control>
             </Form.Group>
 
@@ -154,7 +172,7 @@ const ProductEditScreen = () => {
                 type="number"
                 placeholder="Enter countInStock"
                 value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
+                onChange={handleCountInStockChange}
               ></Form.Control>
             </Form.Group>
 

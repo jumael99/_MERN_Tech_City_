@@ -236,6 +236,15 @@ const getOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
+// @desc    Get total revenue
+// @route   GET /api/orders/revenue
+// @access  Private/Admin
+const getTotalRevenue = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ isPaid: true });
+  const totalRevenue = orders.reduce((acc, order) => acc + order.itemsPrice, 0);
+  res.json({ totalRevenue });
+});
+
 export {
   addOrderItems,
   getMyOrders,
@@ -245,4 +254,5 @@ export {
   getOrders,
   paymentSuccess,
   paymentFailure,
+  getTotalRevenue,
 };

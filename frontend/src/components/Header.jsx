@@ -68,7 +68,7 @@ const Header = () => {
                       Logout
                     </NavDropdown.Item>
                   </NavDropdown>
-                  {userInfo.isAdmin && (
+                  {userInfo && userInfo.isAdmin && (
                     <NavDropdown
                       title="Admin"
                       id="adminmenu"
@@ -82,6 +82,9 @@ const Header = () => {
                       </NavDropdown.Item>
                       <NavDropdown.Item as={Link} to="/admin/userlist">
                         Users
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/admin/revenue">
+                        Revenue
                       </NavDropdown.Item>
                     </NavDropdown>
                   )}

@@ -53,6 +53,18 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+    getSellerOrders: builder.query({
+      query: () => ({
+        url: `${ORDERS_URL}/seller`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    getSellerRevenue: builder.query({
+      query: () => ({
+        url: `${ORDERS_URL}/seller/revenue`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
@@ -65,4 +77,6 @@ export const {
   useGetOrdersQuery,
   useDeliverOrderMutation,
   useGetTotalRevenueQuery,
+  useGetSellerOrdersQuery,
+  useGetSellerRevenueQuery,
 } = orderApiSlice;

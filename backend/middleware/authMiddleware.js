@@ -38,6 +38,7 @@ const admin = (req, res, next) => {
 
 // Seller middleware
 const seller = (req, res, next) => {
+  console.log("User in seller middleware:", req.user);
   if (req.user && req.user.role === "seller") {
     next();
   } else {

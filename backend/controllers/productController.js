@@ -147,6 +147,70 @@ const createProductReview = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update product review
+// @route   PUT /api/products/:id/reviews/:reviewId
+// @access  Private
+const updateProductReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body;
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const review = product.reviews.id(req.params.reviewId);
+
+    if (review) {
+      if (review.user.toString() === req.user._id.toString()) {
+        review.rating = Number(rating);
+        review.comment = comment;
+
+        await product.save();
+        res.json({ message: "Review updated" });
+      } else {
+        res.status(403);
+        throw new Error("You can only edit your own reviews");
+      }
+    } else {
+      res.status(404);
+      throw new Error("Review not found");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+// @desc    Delete product review
+// @route   DELETE /api/products/:id/reviews/:reviewId
+// @access  Private
+const deleteProductReview = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const review = product.reviews.id(req.params.reviewId);
+
+    if (review) {
+      if (review.user.toString() === req.user._id.toString()) {
+        product.reviews.pull(req.params.reviewId);
+        product.numReviews = product.reviews.length;
+        product.rating =
+          product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+            product.reviews.length || 0;
+
+        await product.save();
+        res.json({ message: "Review removed" });
+      } else {
+        res.status(403);
+        throw new Error("You can only delete your own reviews");
+      }
+    } else {
+      res.status(404);
+      throw new Error("Review not found");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
 // @desc    Get top rated product
 // @route   GET /api/products/top
 // @access  Public
@@ -178,6 +242,8 @@ export {
   updateProduct,
   deleteProduct,
   createProductReview,
+  updateProductReview,
+  deleteProductReview,
   getTopProducts,
   getSellerProducts,
 };

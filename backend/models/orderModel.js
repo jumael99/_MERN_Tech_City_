@@ -7,6 +7,11 @@ const orderSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    seller: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     tranId: {
       type: String,
     },
@@ -77,6 +82,7 @@ const orderSchema = mongoose.Schema(
       type: Date,
     },
   },
+
   {
     timestamps: true,
   },

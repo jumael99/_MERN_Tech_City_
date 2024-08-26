@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Row,
@@ -15,23 +14,29 @@ import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
+  useUpdateReviewMutation,
+  useDeleteReviewMutation,
 } from "../slices/productsApiSlice";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { addToCart } from "../slices/cartSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBangladeshiTakaSign } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBangladeshiTakaSign,
+  faEdit,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [editingReviewId, setEditingReviewId] = useState(null);
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
@@ -50,23 +55,64 @@ const ProductScreen = () => {
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();
 
+  const [updateReview] = useUpdateReviewMutation();
+
+  const [deleteReview] = useDeleteReviewMutation();
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
     try {
-      await createReview({
-        productId,
-        rating,
-        comment,
-      }).unwrap();
+      if (editingReviewId) {
+        await updateReview({
+          productId,
+          reviewId: editingReviewId,
+          rating,
+          comment,
+        }).unwrap();
+        toast.success("Review updated successfully");
+        setEditingReviewId(null);
+      } else {
+        await createReview({
+          productId,
+          rating,
+          comment,
+        }).unwrap();
+        toast.success("Review created successfully");
+      }
+      setRating(0);
+      setComment("");
       refetch();
-      toast.success("Review created successfully");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   };
 
-  // Construct the image URL
+  const editReviewHandler = (review) => {
+    setEditingReviewId(review._id);
+    setRating(review.rating);
+    setComment(review.comment);
+  };
+
+  const deleteReviewHandler = async (reviewId) => {
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      try {
+        await deleteReview({ productId, reviewId }).unwrap();
+        toast.success("Review deleted successfully");
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!editingReviewId) {
+      setRating(0);
+      setComment("");
+    }
+  }, [editingReviewId]);
+
   const imageUrl = product
     ? `http://localhost:5000${product.image.startsWith("/") ? "" : "/"}${product.image.replace(/\\/g, "/")}`
     : "";
@@ -85,17 +131,21 @@ const ProductScreen = () => {
       ) : (
         <>
           <Row>
-            <Col md={6}>
-              <Image
-                src={imageUrl}
-                alt={product.name}
-                fluid
-                onError={(e) => {
-                  console.error("Image failed to load:", imageUrl);
-                  e.target.src = "https://via.placeholder.com/400";
-                  e.target.alt = "Image not found";
-                }}
-              />
+            <Col md={6} className="mb-4 mb-md-0">
+              <div className="w-full max-w-md mx-auto overflow-hidden rounded-lg shadow-md">
+                <div className="aspect-w-1 aspect-h-1">
+                  <Image
+                    src={imageUrl}
+                    alt={product.name}
+                    className="object-cover w-full h-full"
+                    onError={(e) => {
+                      console.error("Image failed to load:", imageUrl);
+                      e.target.src = "https://via.placeholder.com/400";
+                      e.target.alt = "Image not found";
+                    }}
+                  />
+                </div>
+              </div>
             </Col>
             <Col md={3}>
               <ListGroup variant="flush">
@@ -109,7 +159,7 @@ const ProductScreen = () => {
                   />
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  Price: <FontAwesomeIcon icon={faBangladeshiTakaSign} /> {""}
+                  Price: <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
                   {product.price}
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -125,7 +175,7 @@ const ProductScreen = () => {
                       <Col>Price:</Col>
                       <Col>
                         <strong>
-                          <FontAwesomeIcon icon={faBangladeshiTakaSign} /> {""}
+                          <FontAwesomeIcon icon={faBangladeshiTakaSign} />{" "}
                           {product.price}
                         </strong>
                       </Col>
@@ -140,7 +190,6 @@ const ProductScreen = () => {
                     </Row>
                   </ListGroup.Item>
 
-                  {/* Qty Select */}
                   {product.countInStock > 0 && (
                     <ListGroup.Item>
                       <Row>
@@ -180,7 +229,7 @@ const ProductScreen = () => {
           </Row>
           <Row className="review">
             <Col md={6}>
-              <h2>Reviews</h2>
+              <h2 className="my-3">Reviews</h2>
               {product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant="flush">
                 {product.reviews.map((review) => (
@@ -189,6 +238,24 @@ const ProductScreen = () => {
                     <Rating value={review.rating} />
                     <p>{review.createdAt.substring(0, 10)}</p>
                     <p>{review.comment}</p>
+                    {userInfo && userInfo._id === review.user && (
+                      <div>
+                        <Button
+                          variant="light"
+                          className="btn-sm mr-2"
+                          onClick={() => editReviewHandler(review)}
+                        >
+                          <FontAwesomeIcon icon={faEdit} /> Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          className="btn-sm"
+                          onClick={() => deleteReviewHandler(review._id)}
+                        >
+                          <FontAwesomeIcon icon={faTrash} /> Delete
+                        </Button>
+                      </div>
+                    )}
                   </ListGroup.Item>
                 ))}
                 <ListGroup.Item>

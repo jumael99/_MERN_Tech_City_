@@ -5,6 +5,7 @@ import { calcPrices } from "../utils/calcPrices.js";
 import SSLCommerzPayment from "sslcommerz-lts";
 import { ObjectId } from "mongodb";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 dotenv.config();
 
 const updateOrderToPaidPost = asyncHandler(async (req, res) => {
@@ -167,9 +168,14 @@ const addOrderItems = asyncHandler(async (req, res) => {
     const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
       calcPrices(dbOrderItems);
 
+    const sellerId = itemsFromDB[0].user._id;
+    console.log("Seller ID when creating order:", sellerId);
+    console.log("Seller ID type:", typeof sellerId);
+
     const order = new Order({
       orderItems: dbOrderItems,
       user: req.user._id,
+      seller: sellerId,
       shippingAddress,
       paymentMethod,
       itemsPrice,
@@ -179,6 +185,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     });
 
     const createdOrder = await order.save();
+    console.log("Created order:", createdOrder);
 
     res.status(201).json(createdOrder);
   }
@@ -245,6 +252,67 @@ const getTotalRevenue = asyncHandler(async (req, res) => {
   res.json({ totalRevenue });
 });
 
+// @desc    Get logged in seller's orders
+// @route   GET /api/orders/seller
+// @access  Private/Seller
+const getSellerOrders = asyncHandler(async (req, res) => {
+  console.log("Request path:", req.path);
+  console.log("Request params:", req.params);
+  console.log("Request query:", req.query);
+
+  try {
+    const sellerId = req.user._id;
+
+    if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+      throw new Error("Invalid seller ID");
+    }
+
+    const orders = await Order.find({ seller: sellerId }).populate(
+      "user",
+      "id name",
+    );
+
+    console.log("Query:", { seller: sellerId });
+    console.log("Found orders:", orders);
+
+    if (orders.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No orders found for this seller" });
+    }
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error in getSellerOrders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// @desc    Get seller's revenue
+// @route   GET /api/orders/seller/revenue
+// @access  Private/Seller
+const getSellerRevenue = asyncHandler(async (req, res) => {
+  try {
+    // Correct usage of ObjectId with 'new' keyword
+    const sellerId = new mongoose.Types.ObjectId(req.user._id);
+
+    // Find all paid orders for the logged-in seller
+    const orders = await Order.find({ seller: sellerId, isPaid: true });
+
+    // Calculate total revenue for the seller
+    const totalRevenue = orders.reduce(
+      (acc, order) => acc + order.itemsPrice,
+      0,
+    );
+
+    // Return the total revenue in JSON format
+    res.json({ totalRevenue });
+  } catch (error) {
+    console.error("Error fetching seller's revenue:", error); // Log the error for debugging
+    res.status(500).json({ message: "Server error", error: error.message }); // Return error message
+  }
+});
+
 export {
   addOrderItems,
   getMyOrders,
@@ -255,4 +323,6 @@ export {
   paymentSuccess,
   paymentFailure,
   getTotalRevenue,
+  getSellerOrders,
+  getSellerRevenue,
 };

@@ -7,6 +7,8 @@ import {
   updateProduct,
   deleteProduct,
   createProductReview,
+  updateProductReview,
+  deleteProductReview,
   getTopProducts,
   getSellerProducts,
 } from "../controllers/productController.js";
@@ -61,5 +63,10 @@ router
 
 // Route to create a product review
 router.route("/:id/reviews").post(protect, createProductReview);
+
+router
+  .route("/:id/reviews/:reviewId")
+  .put(protect, updateProductReview)
+  .delete(protect, deleteProductReview);
 
 export default router;

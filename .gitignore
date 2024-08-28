@@ -11,6 +11,11 @@ node_modules
 # production
 /build
 
+.idea/
+.vscode/
+.history/
+generate_code_context.ps1
+
 # misc
 .DS_Store
 .env

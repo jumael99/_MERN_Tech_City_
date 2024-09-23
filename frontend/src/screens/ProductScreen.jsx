@@ -114,8 +114,22 @@ const ProductScreen = () => {
   }, [editingReviewId]);
 
   const imageUrl = product
-    ? `http://localhost:5000${product.image.startsWith("/") ? "" : "/"}${product.image.replace(/\\/g, "/")}`
+    ? `http://localhost:5000${
+        product.image.startsWith("/") ? "" : "/"
+      }${product.image.replace(/\\/g, "/")}`
     : "";
+
+  const increaseQty = () => {
+    if (qty < product.countInStock) {
+      setQty(qty + 1);
+    }
+  };
+
+  const decreaseQty = () => {
+    if (qty > 1) {
+      setQty(qty - 1);
+    }
+  };
 
   return (
     <>
@@ -185,7 +199,9 @@ const ProductScreen = () => {
                     <Row>
                       <Col>Status:</Col>
                       <Col>
-                        {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                        {product.countInStock > 0
+                          ? `In Stock (${product.countInStock})`
+                          : "Out Of Stock"}
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -195,19 +211,23 @@ const ProductScreen = () => {
                       <Row>
                         <Col>Qty</Col>
                         <Col>
-                          <Form.Control
-                            as="select"
-                            value={qty}
-                            onChange={(e) => setQty(Number(e.target.value))}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              ),
-                            )}
-                          </Form.Control>
+                          <div className="d-flex align-items-center">
+                            <Button
+                              variant="outline-secondary"
+                              onClick={decreaseQty}
+                              disabled={qty === 1}
+                            >
+                              -
+                            </Button>
+                            <span className="mx-3">{qty}</span>
+                            <Button
+                              variant="outline-secondary"
+                              onClick={increaseQty}
+                              disabled={qty === product.countInStock}
+                            >
+                              +
+                            </Button>
+                          </div>
                         </Col>
                       </Row>
                     </ListGroup.Item>

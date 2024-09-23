@@ -15,7 +15,7 @@ const ProductCarousel = () => {
     if (products && products.length > 0) {
       interval = setInterval(() => {
         handleNext();
-      }, 100000);
+      }, 2000);
     }
 
     return () => clearInterval(interval);
@@ -26,13 +26,13 @@ const ProductCarousel = () => {
 
   const handlePrev = () => {
     setActiveIndex((prevIndex) =>
-      prevIndex === 0 ? products.length - 1 : prevIndex - 1,
+      prevIndex === 0 ? products.length - 1 : prevIndex - 1
     );
   };
 
   const handleNext = () => {
     setActiveIndex((prevIndex) =>
-      prevIndex === products.length - 1 ? 0 : prevIndex + 1,
+      prevIndex === products.length - 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -50,11 +50,19 @@ const ProductCarousel = () => {
                   offset === 0
                     ? "w-64 h-80 z-20 opacity-100"
                     : offset === 1 || offset === products.length - 1
-                      ? "w-48 h-64 z-10 opacity-60"
-                      : "w-32 h-48 z-0 opacity-30"
+                    ? "w-48 h-64 z-10 opacity-60"
+                    : "w-32 h-48 z-0 opacity-30"
                 }`}
                 style={{
-                  transform: `translateX(${offset === 0 ? "0" : offset === 1 ? "70%" : offset === products.length - 1 ? "-70%" : "0"})`,
+                  transform: `translateX(${
+                    offset === 0
+                      ? "0"
+                      : offset === 1
+                      ? "70%"
+                      : offset === products.length - 1
+                      ? "-70%"
+                      : "0"
+                  })`,
                 }}
               >
                 <Link to={`/product/${product._id}`}>

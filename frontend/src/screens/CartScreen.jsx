@@ -1,15 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
-  Form,
-  Button,
-  Card,
-} from "react-bootstrap";
-import { FaTrash } from "react-icons/fa";
+import { Row, Col, ListGroup, Image, Button, Card } from "react-bootstrap";
+import { FaTrash, FaPlus, FaMinus } from "react-icons/fa"; // Import Plus and Minus icons
 import Title from "../components/Title";
 
 import { addToCart, removeFromCart } from "../slices/cartSlice";
@@ -31,6 +23,18 @@ const CartScreen = () => {
     dispatch(removeFromCart(id));
   };
 
+  const increaseQty = (item) => {
+    if (item.qty < item.countInStock) {
+      addToCartHandler(item, item.qty + 1);
+    }
+  };
+
+  const decreaseQty = (item) => {
+    if (item.qty > 1) {
+      addToCartHandler(item, item.qty - 1);
+    }
+  };
+
   const checkoutHandler = () => {
     navigate("/login?redirect=/shipping");
   };
@@ -50,7 +54,9 @@ const CartScreen = () => {
                 <Row>
                   <Col md={2}>
                     <Image
-                      src={`http://localhost:5000${item.image.startsWith("/") ? "" : "/"}${item.image.replace(/\\/g, "/")}`}
+                      src={`http://localhost:5000${
+                        item.image.startsWith("/") ? "" : "/"
+                      }${item.image.replace(/\\/g, "/")}`}
                       alt={item.name}
                       fluid
                       rounded
@@ -68,20 +74,24 @@ const CartScreen = () => {
                     <FontAwesomeIcon icon={faBangladeshiTakaSign} /> {""}
                     {item.price}
                   </Col>
-                  <Col md={2}>
-                    <Form.Control
-                      as="select"
-                      value={item.qty}
-                      onChange={(e) =>
-                        addToCartHandler(item, Number(e.target.value))
-                      }
-                    >
-                      {[...Array(item.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
-                        </option>
-                      ))}
-                    </Form.Control>
+                  <Col md={3}>
+                    <div className="d-flex align-items-center">
+                      <Button
+                        variant="light"
+                        onClick={() => decreaseQty(item)}
+                        disabled={item.qty === 1}
+                      >
+                        <FaMinus />
+                      </Button>
+                      <span className="mx-2">{item.qty}</span>
+                      <Button
+                        variant="light"
+                        onClick={() => increaseQty(item)}
+                        disabled={item.qty === item.countInStock}
+                      >
+                        <FaPlus />
+                      </Button>
+                    </div>
                   </Col>
                   <Col md={2}>
                     <Button
@@ -108,7 +118,7 @@ const CartScreen = () => {
               </h2>
               <FontAwesomeIcon icon={faBangladeshiTakaSign} /> {""}
               {Math.round(
-                cartItems.reduce((acc, item) => acc + item.qty * item.price, 0),
+                cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)
               )}
             </ListGroup.Item>
             <ListGroup.Item>

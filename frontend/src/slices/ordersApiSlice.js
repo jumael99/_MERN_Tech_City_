@@ -23,12 +23,12 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         body: details,
       }),
     }),
-    getsslcommerzClientId: builder.query({
-      query: () => ({
-        url: sslcommerz_URL,
-      }),
-      keepUnusedDataFor: 5,
-    }),
+    // getsslcommerzClientId: builder.query({
+    //   query: () => ({
+    //     url: sslcommerz_URL,
+    //   }),
+    //   keepUnusedDataFor: 5,
+    // }),
     getMyOrders: builder.query({
       query: () => ({
         url: `${ORDERS_URL}/mine`,
@@ -72,7 +72,7 @@ export const {
   useCreateOrderMutation,
   useGetOrderDetailsQuery,
   usePayOrderMutation,
-  useGetsslcommerzClientIdQuery,
+  // useGetsslcommerzClientIdQuery,
   useGetMyOrdersQuery,
   useGetOrdersQuery,
   useDeliverOrderMutation,

@@ -114,7 +114,7 @@ const ProductScreen = () => {
   }, [editingReviewId]);
 
   const imageUrl = product
-    ? `http://localhost:5000${
+    ? `https://mern-tech-city.onrender.com${
         product.image.startsWith("/") ? "" : "/"
       }${product.image.replace(/\\/g, "/")}`
     : "";

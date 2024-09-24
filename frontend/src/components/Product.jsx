@@ -9,7 +9,7 @@ import {
 import "../assets/styles/product.css";
 
 const Product = ({ product }) => {
-  const imageUrl = `http://localhost:5000${product.image.startsWith("/") ? "" : "/"}${product.image.replace(/\\/g, "/")}`;
+  const imageUrl = `https://mern-tech-city.onrender.com${product.image.startsWith("/") ? "" : "/"}${product.image.replace(/\\/g, "/")}`;
 
   return (
     <div className="product-card my-3 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl">

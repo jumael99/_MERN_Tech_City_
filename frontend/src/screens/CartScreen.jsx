@@ -54,7 +54,7 @@ const CartScreen = () => {
                 <Row>
                   <Col md={2}>
                     <Image
-                      src={`http://localhost:5000${
+                      src={`https://mern-tech-city.onrender.com${
                         item.image.startsWith("/") ? "" : "/"
                       }${item.image.replace(/\\/g, "/")}`}
                       alt={item.name}

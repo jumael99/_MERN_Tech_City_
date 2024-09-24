@@ -67,7 +67,7 @@ const ProductCarousel = () => {
               >
                 <Link to={`/product/${product._id}`}>
                   <img
-                    src={`http://localhost:5000${product.image}`}
+                    src={`https://mern-tech-city.onrender.com${product.image}`}
                     alt={product.name}
                     className="w-full h-full object-cover rounded-lg"
                   />

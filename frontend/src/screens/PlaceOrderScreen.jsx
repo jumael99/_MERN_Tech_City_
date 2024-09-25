@@ -81,7 +81,7 @@ const PlaceOrderScreen = () => {
                       <Row>
                         <Col md={1}>
                           <Image
-                            src={`http://localhost:5000${item.image.startsWith("/") ? "" : "/"}${item.image.replace(/\\/g, "/")}`}
+                            src={`https://mern-tech-city.onrender.com${item.image.startsWith("/") ? "" : "/"}${item.image.replace(/\\/g, "/")}`}
                             alt={item.name}
                             fluid
                             rounded

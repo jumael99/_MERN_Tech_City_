@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Your frontend URL
+    origin: "https://rococo-begonia-84f28e.netlify.app", // Your frontend URL
     credentials: true,
   })
 );

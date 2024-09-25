@@ -64,7 +64,7 @@ const updateOrderToPaidPost = asyncHandler(async (req, res) => {
     const sslcz = new SSLCommerzPayment(
       process.env.STORE_ID,
       process.env.STORE_PASS,
-      false,
+      false
     );
     const apiResponse = await sslcz.init(data);
 
@@ -95,7 +95,9 @@ const paymentSuccess = asyncHandler(async (req, res) => {
     updateOrder.isPaid = true;
     updateOrder.paidAt = Date.now();
     await updateOrder.save();
-    res.redirect(`http://localhost:3000/order/${updateOrder._id}`); //added updateOrder._id solve another one.
+    res.redirect(
+      `https://rococo-begonia-84f28e.netlify.app/order/${updateOrder._id}`
+    ); //added updateOrder._id solve another one.
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
@@ -110,11 +112,13 @@ const paymentFailure = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Order is not found" });
     }
 
-    const redirectUrl = `http://localhost:3000/order/${updateOrder._id}`;
+    const redirectUrl = `https://rococo-begonia-84f28e.netlify.app/order/${updateOrder._id}`;
     res.redirect(redirectUrl);
   } catch (error) {
     res.redirect(
-      `http://localhost:3000/payment-error?message=${encodeURIComponent(error.message)}`,
+      `https://rococo-begonia-84f28e.netlify.app/payment-error?message=${encodeURIComponent(
+        error.message
+      )}`
     );
   }
 });
@@ -205,7 +209,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
     "user",
-    "name email",
+    "name email"
   );
 
   if (order) {
@@ -269,7 +273,7 @@ const getSellerOrders = asyncHandler(async (req, res) => {
 
     const orders = await Order.find({ seller: sellerId }).populate(
       "user",
-      "id name",
+      "id name"
     );
 
     console.log("Query:", { seller: sellerId });
@@ -302,7 +306,7 @@ const getSellerRevenue = asyncHandler(async (req, res) => {
     // Calculate total revenue for the seller
     const totalRevenue = orders.reduce(
       (acc, order) => acc + order.itemsPrice,
-      0,
+      0
     );
 
     // Return the total revenue in JSON format

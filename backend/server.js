@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://rococo-begonia-84f28e.netlify.app", // Your frontend URL
+    origin: "https://classy-sunshine-a5c2b8.netlify.app", // Your frontend URL
     credentials: true,
   })
 );

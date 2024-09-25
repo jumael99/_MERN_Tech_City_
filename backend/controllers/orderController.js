@@ -9,9 +9,6 @@ import mongoose from "mongoose";
 dotenv.config();
 
 const updateOrderToPaidPost = asyncHandler(async (req, res) => {
-  console.log("Received payment request for order:", req.params.id);
-  console.log("User:", req.user);
-
   try {
     const order = await Order.findById(req.params.id);
 
@@ -64,7 +61,7 @@ const updateOrderToPaidPost = asyncHandler(async (req, res) => {
     const sslcz = new SSLCommerzPayment(
       process.env.STORE_ID,
       process.env.STORE_PASS,
-      false,
+      false
     );
     const apiResponse = await sslcz.init(data);
 
@@ -114,7 +111,9 @@ const paymentFailure = asyncHandler(async (req, res) => {
     res.redirect(redirectUrl);
   } catch (error) {
     res.redirect(
-      `http://localhost:3000/payment-error?message=${encodeURIComponent(error.message)}`,
+      `http://localhost:3000/payment-error?message=${encodeURIComponent(
+        error.message
+      )}`
     );
   }
 });
@@ -169,8 +168,6 @@ const addOrderItems = asyncHandler(async (req, res) => {
       calcPrices(dbOrderItems);
 
     const sellerId = itemsFromDB[0].user._id;
-    console.log("Seller ID when creating order:", sellerId);
-    console.log("Seller ID type:", typeof sellerId);
 
     const order = new Order({
       orderItems: dbOrderItems,
@@ -205,7 +202,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
     "user",
-    "name email",
+    "name email"
   );
 
   if (order) {
@@ -269,7 +266,7 @@ const getSellerOrders = asyncHandler(async (req, res) => {
 
     const orders = await Order.find({ seller: sellerId }).populate(
       "user",
-      "id name",
+      "id name"
     );
 
     console.log("Query:", { seller: sellerId });
@@ -302,7 +299,7 @@ const getSellerRevenue = asyncHandler(async (req, res) => {
     // Calculate total revenue for the seller
     const totalRevenue = orders.reduce(
       (acc, order) => acc + order.itemsPrice,
-      0,
+      0
     );
 
     // Return the total revenue in JSON format

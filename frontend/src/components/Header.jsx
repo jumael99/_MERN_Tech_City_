@@ -1,9 +1,10 @@
 import React from "react";
 import { Navbar, Nav, Container, NavDropdown, Badge } from "react-bootstrap";
-import { FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
+import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
+import { resetCart } from "../slices/cartSlice"; // Import resetCart
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import SearchBox from "./SearchBox";
@@ -22,6 +23,7 @@ const Header = () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
+      dispatch(resetCart()); // Reset the cart on logout
       navigate("/login");
     } catch (err) {
       console.error(err);

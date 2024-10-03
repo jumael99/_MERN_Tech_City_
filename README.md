@@ -1,70 +1,42 @@
-# Tech City eCommerce Platform
+# 🏙️ Tech City eCommerce Platform
 
 An eCommerce platform built with the MERN stack and Redux, featuring a complete shopping cart system and integration with the SSLCOMMERZ payment gateway with three actors: customer, seller and admin.
 
-# Image Slider for Project Screenshots
+---
 
-<div style="text-align: center;">
-  <img id="slideImage" src="docs/Screenshot_1.png" style="max-width: 100%; border-radius: 10px;" alt="Slide Image">
-  <br><br>
-  <button id="prevButton" onclick="previousImage()" style="background-color: #f0f0f0; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-right: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">Previous</button>
+![Screenshot 1](docs/Wholesum_Design.png)
 
-<button id="nextButton" onclick="nextImage()" style="background-color: #f0f0f0; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">Next</button>
-</div>
+## ✨ Features:
 
-<script>
-  let images = [
-    "docs/Screenshot_1.png", 
-    "docs/Screenshot_2.png", 
-    "docs/Screenshot_3.png", 
-    "docs/Screenshot_4.png", 
-    "docs/Screenshot_5.png", 
-    "docs/Screenshot_6.png"
-  ];
-  let currentIndex = 0;
+* Full featured shopping cart
 
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % images.length;
-    document.getElementById("slideImage").src = images[currentIndex];
-  }
+* Product reviews and ratings
 
-  function previousImage() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    document.getElementById("slideImage").src = images[currentIndex];
-  }
-</script>
+* Top products carousel
 
-## Features:
+* Product pagination
 
-➡️ Full featured shopping cart
+* Product search feature
 
-➡️ Product reviews and ratings
+* User profile with orders
 
-➡️ Top products carousel
+* Admin product management
 
-➡️ Product pagination
+* Admin user management
 
-➡️ Product search feature
+* Admin Order details page
 
-➡️ User profile with orders
+* Mark orders as delivered option
 
-➡️ Admin product management
+* Checkout process (shipping, payment method, etc.)
 
-➡️ Admin user management
+* SSLCOMMERZ integration
 
-➡️ Admin Order details page
-
-➡️ Mark orders as delivered option
-
-➡️ Checkout process (shipping, payment method, etc.)
-
-➡️ SSLCOMMERZ integration
-
-➡️ Database seeder (products & users)
+* Database seeder (products & users)
 
 
 
-## Env Variables
+## ⚙️ Env Variables
 
 Rename the `.env.example` file to `.env` and add the following
 
@@ -82,7 +54,7 @@ REACT_APP_API_URL=http://localhost:3000
 
 
 
-## Steps to install the App in you local machine
+## 🛠️ Steps to install the App in you local machine
 
 
 
@@ -112,7 +84,7 @@ npm run build
 
 
 
-## Sample User Login:
+## 🔑 Sample User Login:
 
 Admin
 

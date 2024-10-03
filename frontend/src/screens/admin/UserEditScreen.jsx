@@ -48,7 +48,7 @@ const UserEditScreen = () => {
       setName(user.name);
       setEmail(user.email);
       setIsAdmin(user.isAdmin);
-      setRole(user.role); // Add this line
+      setRole(user.role);
     }
   }, [user]);
 

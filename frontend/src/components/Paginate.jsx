@@ -19,10 +19,10 @@ const Paginate = ({
               isAdmin
                 ? `/admin/productlist/${x + 1}`
                 : userRole === "seller"
-                  ? `/seller/productlist/${x + 1}`
-                  : keyword
-                    ? `/search/${keyword}/page/${x + 1}`
-                    : `/page/${x + 1}`
+                ? `/seller/productlist/${x + 1}`
+                : keyword
+                ? `/search/${keyword}/page/${x + 1}`
+                : `/page/${x + 1}`
             }
           >
             <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>

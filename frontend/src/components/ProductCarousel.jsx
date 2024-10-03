@@ -15,7 +15,7 @@ const ProductCarousel = () => {
     if (products && products.length > 0) {
       interval = setInterval(() => {
         handleNext();
-      }, 2000);
+      }, 4000);
     }
 
     return () => clearInterval(interval);

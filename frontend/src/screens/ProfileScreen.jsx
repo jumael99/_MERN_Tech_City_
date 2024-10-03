@@ -147,11 +147,9 @@ const ProfileScreen = () => {
                     )}
                   </td>
                   <td>
-                    {order.isDelivered ? (
-                      formatDate(order.deliveredAt)
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                    {order.isDelivered
+                      ? formatDate(order.deliveredAt)
+                      : "Mark as delivered"}
                   </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>

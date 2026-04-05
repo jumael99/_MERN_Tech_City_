@@ -7,7 +7,7 @@
   "proxy": "http://localhost:8989",
   "scripts": {
     "start": "node backend/server.js",
-    "server": "node --watch backend/server.js",
+    "server": "node backend/server.js",
     "client": "PORT=3002 NODE_OPTIONS=--openssl-legacy-provider npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\" ",
     "data:import": "node backend/seeder.js",
